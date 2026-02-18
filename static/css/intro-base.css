@@ -1,0 +1,56 @@
+/* 기본 스타일 - 모든 intro 페이지에서 공통으로 사용 */
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(15, 14, 14);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    overflow: hidden !important;
+}
+
+/* 클릭 가능한 요소에 호버 효과 추가 */
+button,
+a,
+[role="button"],
+.cursor-pointer,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+[onclick] {
+    cursor: pointer;
+}
+
+/* 입력 필드는 기본 커서 유지 */
+input:not([type="button"]):not([type="submit"]):not([type="reset"]),
+textarea,
+select {
+    cursor: text;
+}
+
+/* 메인 컨테이너: Figma 디자인 비율 유지 (1440x810 = 16:9) */
+.bg-desktop {
+    background-color: rgb(15, 14, 14);
+    max-width: min(100vw, calc(100vh * 16 / 9));
+    max-height: min(100vh, calc(100vw * 9 / 16));
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden !important;
+}
+
+@media (min-aspect-ratio: 16/9) {
+    .bg-desktop {
+        height: 100vh;
+        width: calc(100vh * 16 / 9);
+    }
+}
+
+@media (max-aspect-ratio: 16/9) {
+    .bg-desktop {
+        width: 100vw;
+        height: calc(100vw * 9 / 16);
+    }
+}
+
+/* Intro 페이지 이미지 페이드인 효과 */
+.bg-desktop img {
+    transition: opacity 0.5s ease-in;
+}

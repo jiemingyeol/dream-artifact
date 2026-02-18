@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Artifact - Intro 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/intro-base.css') }}">
+    <style>
+        @font-face {
+            font-family: 'Geist';
+            src: url('{{ url_for("static", filename="fonts/Geist-SemiBold.ttf") }}') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+    </style>
+    <script src="{{ url_for('static', filename='js/image-preloader.js') }}"></script>
+</head>
+<body class="overflow-hidden h-screen w-screen flex items-center justify-center">
+    <div class="bg-desktop relative overflow-hidden" data-name="Desktop" data-node-id="1:8230">
+        <!-- Marquee -->
+        <div class="absolute top-0 left-0 w-full h-[7.41vh] flex items-center justify-center" data-name="Marquee" data-node-id="1:8231">
+            <img src="{{ url_for('static', filename='images/intro/marquee.png') }}" alt="Marquee" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Logo -->
+        <!-- 위치: (28, 60), 크기: 99×46 -->
+        <div class="absolute left-[1.94%] top-[7.41vh] w-[6.88%] h-[5.68vh] cursor-pointer" id="logoLink" data-intro1-url="{{ url_for('intro1') }}" data-name="로고 2" data-node-id="I1:8233;1:8388">
+            <img src="{{ url_for('static', filename='images/intro/logo.png') }}" alt="Logo" class="w-full h-full object-cover max-w-none pointer-events-none">
+        </div>
+
+        <!-- Shop Illustration -->
+        <!-- Figma: 1440x810 프레임 기준, 위치 top=14.32vh right=6.32% bottom=9.51vh, 비율 3154:4096 -->
+        <div class="absolute aspect-[3154/4096] top-[14.32vh] right-[6.32%] bottom-[9.51vh] overflow-hidden" data-name="251214_(백업)단체작 home 페이지 디자인 시안 2" data-node-id="1:8234">
+            <img src="{{ url_for('static', filename='images/intro/shop-illustration.png') }}" alt="Dream Artifact Shop" class="absolute inset-0 w-full h-full object-cover max-w-none pointer-events-none">
+        </div>
+
+        <!-- Main Title -->
+        <!-- Figma: 1440x810 프레임 기준, 크기 60.83%x32.59vh, 위치 left=3.06% top=calc(50%-0.99vh) -->
+        <div class="absolute h-[32.59vh] w-[60.83%] left-[3.06%] top-[calc(50%-0.99vh)] -translate-y-1/2 overflow-hidden" data-name="로고 가로 버전 3" data-node-id="1:8235">
+            <img src="{{ url_for('static', filename='images/intro/main-title.png') }}" alt="DREAM ARTIFACT" class="absolute inset-0 w-full h-full object-cover max-w-none pointer-events-none">
+        </div>
+
+        <!-- START Button -->
+        <!-- Figma: 1440x810 프레임 기준, 크기 9.86%x6.42vh, 위치 left=28.61% top=63.46% -->
+        <a href="{{ url_for('intro2') }}" class="group absolute bg-[#ffaaff] flex items-center justify-center h-[6.42vh] w-[9.86%] left-[28.61%] top-[63.46%] cursor-pointer transition-colors duration-200 hover:bg-white no-underline" data-node-id="1:8236" style="font-family: 'Geist', sans-serif;">
+            <span class="font-semibold text-[1.67vw] leading-[1.4] text-white group-hover:text-[#ffaaff] text-center tracking-[-0.48px] shrink-0 transition-colors duration-200" data-node-id="1:8238">
+                START
+            </span>
+        </a>
+    </div>
+    <!-- 커스텀 커서 스크립트 -->
+    <!-- 로고 클릭 시 초기 화면으로 돌아가기 -->
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/intro-common.js') }}"></script>
+</body>
+</html>

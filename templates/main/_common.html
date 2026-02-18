@@ -1,0 +1,21 @@
+<!-- Main 페이지 공통 요소: Marquee, Navigation (Logo + Buttons) -->
+
+<!-- Marquee -->
+<div class="main-marquee">
+    <p>A shop where unwanted memories become currency for dream items.</p>
+</div>
+
+<!-- Navigation -->
+<nav class="main-navigation">
+    <!-- Logo -->
+    <div class="main-logo">
+        <img src="{{ url_for('static', filename='images/main/logo.png') }}" alt="Logo">
+    </div>
+    
+    <!-- Navigation Buttons -->
+    <div class="main-nav-buttons">
+        <button class="main-nav-button" id="home-button">Home</button>
+        <button class="main-nav-button" id="shop-button">Shop</button>
+        <button class="main-nav-button" id="cart-button">Cart</button>
+    </div>
+</nav>

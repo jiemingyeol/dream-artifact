@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko" 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Artifact - Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main-base.css') }}">
+    <style>
+        @font-face {
+            font-family: 'Geist';
+            src: url('{{ url_for("static", filename="fonts/Geist-SemiBold.ttf") }}') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Inter';
+            src: url('{{ url_for("static", filename="fonts/Inter_24pt-SemiBold.ttf") }}') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Inter';
+            src: url('{{ url_for("static", filename="fonts/Inter_18pt-Medium.ttf") }}') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @keyframes shop-text-group-fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .shop-text-group-enter {
+            opacity: 0;
+            animation: shop-text-group-fade-in 0.8s ease-out forwards;
+        }
+    </style>
+    <script src="{{ url_for('static', filename='js/main-base.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/image-preloader.js') }}"></script>
+</head>
+<body >
+    <div class="main-container" style="height: calc(3937 / 1440 * var(--container-width));">
+        <!-- Marquee -->
+        <div class="w-full flex items-center justify-center relative bg-black" style="height: calc(53 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/marquee.png') }}" alt="Marquee" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Logo -->
+        <!-- 위치: (28, 70), 크기: 99×46 - intro와 동일한 위치 -->
+        <div class="absolute cursor-pointer" style="left: calc(28 / 1440 * var(--container-width)); top: calc(60 / 1440 * var(--container-width)); width: calc(99 / 1440 * var(--container-width)); height: calc(46 / 1440 * var(--container-width)); z-index: 1000;" id="logoLink" data-intro1-url="{{ url_for('intro1') }}">
+            <img src="{{ url_for('static', filename='images/main/logo.png') }}" alt="Logo" class="w-full h-full object-contain" style="display: block;">
+        </div>
+
+        <!-- Token -->
+        <!-- 위치: (144, 70) -->
+        <div class="absolute flex items-center text-white" style="left: calc(144 / 1440 * var(--container-width)); top: calc(70 / 1440 * var(--container-width)); font-family: 'Geist', sans-serif; font-size: calc(20 / 1440 * var(--container-width)); font-weight: 600; letter-spacing: calc(-0.05 * 20 / 1440 * var(--container-width)); line-height: 1.4; z-index: 1000;">
+            <span>보유 토큰: <span style="opacity: 0;">원</span> {{ customer_token }}</span>
+        </div>
+        <!-- Token Unit Image (보유토큰) -->
+        <img src="{{ url_for('static', filename='images/main/token-unit-w.png') }}" alt="Token Unit" class="absolute" style="left: calc((144 + 60 - 10 + 5.5 + 20) / 1440 * var(--container-width)); top: calc((70 + 20 * 0.12 + 20 * 0.05 + 0.5) / 1440 * var(--container-width)); width: calc(20 / 1440 * var(--container-width)); height: auto; z-index: 1001; pointer-events: none;">
+
+        <!-- Navigation -->
+        <nav class="w-full flex items-center justify-end relative bg-black" style="height: calc(56 / 1440 * var(--container-width)); padding: 0 calc(28 / 1440 * var(--container-width));">
+            <!-- Navigation Buttons -->
+            <div class="flex items-center" style="gap: calc(8 / 1440 * var(--container-width));">
+                <button id="home-button" class="border-none transition-opacity hover:opacity-80 active:opacity-60 p-0 bg-transparent" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                    <img src="{{ url_for('static', filename='images/main/home-button.png') }}" alt="Home" class="h-full w-auto object-contain" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                </button>
+                <button id="shop-button" class="border-none p-0 bg-transparent" style="height: calc(46 / 1440 * var(--container-width)); width: auto; opacity: 0.5; pointer-events: none;">
+                    <img src="{{ url_for('static', filename='images/main/shop-button.png') }}" alt="Shop" class="h-full w-auto object-contain" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                </button>
+                <button id="cart-button" class="border-none transition-opacity hover:opacity-80 active:opacity-60 p-0 bg-transparent relative" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                    <img src="{{ url_for('static', filename='images/main/cart-button.png') }}" alt="Cart" class="h-full w-auto object-contain" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                    <!-- Cart Badge -->
+                    <div class="absolute flex items-center justify-center rounded-full text-white" style="bottom: calc(33 / 1440 * var(--container-width)); left: calc(100% - 13 / 1440 * var(--container-width)); width: calc(20 / 1440 * var(--container-width)); height: calc(20 / 1440 * var(--container-width)); background-color: #FF3A3A; font-family: 'Geist', sans-serif; font-size: calc(12 / 1440 * var(--container-width)); font-weight: 600; line-height: 1.4; letter-spacing: calc(-0.02 * 12 / 1440 * var(--container-width));">
+                        {{ cart_count }}
+                    </div>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Main Title 2 -->
+        <div class="absolute" style="left: calc(98 / 1440 * var(--container-width)); top: calc(162 / 1440 * var(--container-width)); width: calc(1250 / 1440 * var(--container-width)); height: calc(387 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/main-title-2.png') }}" alt="Main Title 2" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Text Group: 그리드 첫 줄 이미지 상단에서 100 위, 크기 703×63, 접속 1초 후 서서히 나타남 -->
+        <div class="absolute shop-text-group-enter" style="left: calc(369 / 1440 * var(--container-width)); top: calc((600 - 80 - 63) / 1440 * var(--container-width)); width: calc(703 / 1440 * var(--container-width)); height: calc(63 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/text-group.png') }}" alt="Text Group" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Product Grid -->
+        <div class="absolute" style="left: calc(125 / 1440 * var(--container-width)); top: calc(600 / 1440 * var(--container-width)); width: calc(1190 / 1440 * var(--container-width));">
+            <div class="grid grid-cols-3" style="column-gap: calc(52 / 1440 * var(--container-width)); row-gap: calc(49 / 1440 * var(--container-width));">
+                {% for product in shop_products %}
+                <!-- Product Item Group -->
+                <div class="product-item flex flex-col cursor-pointer"  onclick="window.location.href='/product{{ product.id }}'">
+                    <!-- Product Image Container (362x362) -->
+                    <div class="product-image bg-white rounded-lg overflow-hidden" style="width: calc(362 / 1440 * var(--container-width)); height: calc(362 / 1440 * var(--container-width)); border-radius: calc(30 / 1440 * var(--container-width));">
+                        <img src="{{ url_for('static', filename=product.image_path.replace('static/', '')) }}" alt="{{ product.name }}" class="w-full h-full object-contain" >
+                    </div>
+                    <!-- Product Info (366x29, 32px below image) -->
+                    <div class="product-text relative" style="left: 0; width: calc(366 / 1440 * var(--container-width)); height: calc(29 / 1440 * var(--container-width)); margin-top: calc(32 / 1440 * var(--container-width));">
+                        <div class="product-name text-white absolute left-0 top-0" style="font-family: 'Inter', sans-serif; font-size: calc(24 / 1440 * var(--container-width)); font-weight: 600; line-height: 1.2; letter-spacing: calc(-0.02 * 24 / 1440 * var(--container-width)); color: #FFFFFF;">
+                            {{ product.name }}
+                        </div>
+                        <div class="product-price text-white absolute right-0 bottom-0" style="font-family: 'Inter', sans-serif; font-size: calc(18 / 1440 * var(--container-width)); font-weight: 500; line-height: 1.45; letter-spacing: calc(-0.005 * 18 / 1440 * var(--container-width)); color: #FFFFFF;">
+                            <span style="opacity: 0;">원</span> {{ product.price_formatted }}
+                        </div>
+                        <!-- Token Unit Image (상품 가격) -->
+                        <img src="{{ url_for('static', filename='images/main/token-unit-w.png') }}" alt="Token Unit" class="absolute" style="right: calc((18 * 0.95 + 2 + 18 * 2.5) / 1440 * var(--container-width)); bottom: calc((18 * 0.18) / 1440 * var(--container-width)); width: calc(18 / 1440 * var(--container-width)); height: auto; z-index: 3; pointer-events: none;">
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Objects -->
+        <div class="absolute left-0" style="top: calc(2611 / 1440 * var(--container-width)); width: calc(1440 / 1440 * var(--container-width)); height: calc(390 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/objects.png') }}" alt="Objects" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- About Text -->
+        <div class="absolute" style="left: calc(80 / 1440 * var(--container-width)); top: calc(3001 / 1440 * var(--container-width)); width: calc(1280 / 1440 * var(--container-width)); height: calc(380 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/about-text.png') }}" alt="About Text" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Footer -->
+        <div class="absolute left-0 w-full" style="bottom: calc(47 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/footer.png') }}" alt="Footer" class="w-full h-auto">
+        </div>
+    </div>
+    <!-- 커스텀 커서 스크립트 -->
+    <!-- Navigation 버튼 클릭 이벤트 -->
+    <script>
+        (function() {
+            // Home 버튼 클릭 시 home 페이지로 이동
+            const homeButton = document.getElementById('home-button');
+            if (homeButton) {
+                homeButton.addEventListener('click', function() {
+                    window.location.href = "{{ url_for('home') }}";
+                });
+            }
+            
+            // Cart 버튼 클릭 시 cart 페이지로 이동
+            const cartButton = document.getElementById('cart-button');
+            if (cartButton) {
+                cartButton.addEventListener('click', function() {
+                    window.location.href = "{{ url_for('cart') }}";
+                });
+            }
+        })();
+    </script>
+    <!-- 커스텀 모달 스크립트 -->
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <!-- 로고 클릭 시 초기 화면으로 돌아가기 -->
+    <script src="{{ url_for('static', filename='js/intro-common.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Dream Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        th {
+            background-color: #1a1a1a;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        tr:hover {
+            background-color: #1a1a1a;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .pagination a, .pagination span {
+            padding: 8px 12px;
+            color: #ffffff;
+            text-decoration: none;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+        .pagination a:hover {
+            background-color: #333;
+        }
+        .pagination .current {
+            background-color: #333;
+            font-weight: 600;
+        }
+        .clear-button {
+            display: block;
+            margin: 30px auto;
+            padding: 12px 24px;
+            background-color: #ff4444;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .clear-button:hover {
+            background-color: #cc0000;
+        }
+        .info {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #888;
+        }
+        .text-cell {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin - 고객 데이터베이스</h1>
+        
+        <div class="info">
+            총 {{ total }}명의 고객 데이터 (페이지 {{ page }} / {{ total_pages }})
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>이름</th>
+                    <th>사연 1</th>
+                    <th>사연 2</th>
+                    <th>사연 3</th>
+                    <th>토큰</th>
+                    <th>구매 물건</th>
+                    <th>구매 가격</th>
+                    <th>생성 일시</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if customers %}
+                    {% for customer in customers %}
+                    <tr>
+                        <td>{{ customer.id }}</td>
+                        <td>{{ customer.name }}</td>
+                        <td class="text-cell" title="{{ customer.text1 or '' }}">
+                            {% if customer.text1 %}
+                                {{ customer.text1[:15] }}{% if customer.text1|length > 15 %}...{% endif %}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td class="text-cell" title="{{ customer.text2 or '' }}">
+                            {% if customer.text2 %}
+                                {{ customer.text2[:15] }}{% if customer.text2|length > 15 %}...{% endif %}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td class="text-cell" title="{{ customer.text3 or '' }}">
+                            {% if customer.text3 %}
+                                {{ customer.text3[:15] }}{% if customer.text3|length > 15 %}...{% endif %}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ customer.token }}</td>
+                        <td>{{ customer.buy or '-' }}</td>
+                        <td>{{ customer.price or '-' }}</td>
+                        <td>{{ customer.timestamp }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 40px;">
+                            데이터가 없습니다.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        
+        {% if total_pages > 1 %}
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="{{ url_for('admin', page=page-1) }}">이전</a>
+            {% endif %}
+            
+            {% set start_page = 1 if page - 2 < 1 else page - 2 %}
+            {% set end_page = total_pages if page + 2 > total_pages else page + 2 %}
+            
+            {% if start_page > 1 %}
+                <a href="{{ url_for('admin', page=1) }}">1</a>
+                {% if start_page > 2 %}
+                    <span>...</span>
+                {% endif %}
+            {% endif %}
+            
+            {% for p in range(start_page, end_page + 1) %}
+                {% if p == page %}
+                    <span class="current">{{ p }}</span>
+                {% else %}
+                    <a href="{{ url_for('admin', page=p) }}">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if end_page < total_pages %}
+                {% if end_page < total_pages - 1 %}
+                    <span>...</span>
+                {% endif %}
+                <a href="{{ url_for('admin', page=total_pages) }}">{{ total_pages }}</a>
+            {% endif %}
+            
+            {% if page < total_pages %}
+                <a href="{{ url_for('admin', page=page+1) }}">다음</a>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <button class="clear-button" onclick="clearDatabase()">DB 초기화</button>
+
+        <h1 style="margin-top: 48px;">상품별 구매수</h1>
+        <div class="info">
+            상품 {{ product_stats|length }}개 (id, name, type, purchase_count)
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>type</th>
+                    <th>purchase_count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if product_stats %}
+                    {% for row in product_stats %}
+                    <tr>
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.type }}</td>
+                        <td>{{ row.purchase_count }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 40px;">데이터가 없습니다.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        <button class="clear-button" onclick="clearProductStats()">상품 구매수 초기화</button>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <script>
+        async function clearDatabase() {
+            const confirmed = await customConfirm('정말로 데이터베이스를 초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다.');
+            if (!confirmed) {
+                return;
+            }
+            
+            fetch('/admin/clear', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(async (data) => {
+                if (data.success) {
+                    await customAlert('데이터베이스가 초기화되었습니다.');
+                    location.reload();
+                } else {
+                    await customAlert('오류가 발생했습니다.');
+                }
+            })
+            .catch(async (error) => {
+                console.error('Error:', error);
+                await customAlert('오류가 발생했습니다.');
+            });
+        }
+
+        async function clearProductStats() {
+            const confirmed = await customConfirm('상품 구매수를 모두 0으로 초기화하시겠습니까?');
+            if (!confirmed) {
+                return;
+            }
+            fetch('/admin/clear-product-stats', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(async (data) => {
+                if (data.success) {
+                    await customAlert('상품 구매수가 초기화되었습니다.');
+                    location.reload();
+                } else {
+                    await customAlert('오류가 발생했습니다.');
+                }
+            })
+            .catch(async (error) => {
+                console.error('Error:', error);
+                await customAlert('오류가 발생했습니다.');
+            });
+        }
+    </script>
+</body>
+</html>

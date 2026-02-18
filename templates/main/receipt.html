@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko" 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Artifact - Receipt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main-base.css') }}">
+    <style>
+        @font-face {
+            font-family: 'Geist';
+            src: url('{{ url_for("static", filename="fonts/Geist-Regular.ttf") }}') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('{{ url_for("static", filename="fonts/Geist-Medium.ttf") }}') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('{{ url_for("static", filename="fonts/Geist-SemiBold.ttf") }}') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Inter';
+            src: url('{{ url_for("static", filename="fonts/Inter_24pt-Regular.ttf") }}') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Inter';
+            src: url('{{ url_for("static", filename="fonts/Inter_24pt-SemiBold.ttf") }}') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Inter';
+            src: url('{{ url_for("static", filename="fonts/Inter_24pt-Bold.ttf") }}') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+    </style>
+    <script src="{{ url_for('static', filename='js/main-base.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/image-preloader.js') }}"></script>
+</head>
+<body >
+    <div class="main-container" style="height: calc(2508 / 1440 * var(--container-width));">
+        <!-- Marquee -->
+        <div class="w-full flex items-center justify-center relative bg-black" style="height: calc(53 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/marquee.png') }}" alt="Marquee" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Logo -->
+        <!-- 위치: (28, 70), 크기: 99×46 - intro와 동일한 위치 -->
+        <div class="absolute cursor-pointer" style="left: calc(28 / 1440 * var(--container-width)); top: calc(60 / 1440 * var(--container-width)); width: calc(99 / 1440 * var(--container-width)); height: calc(46 / 1440 * var(--container-width)); z-index: 1000;" id="logoLink" data-intro1-url="{{ url_for('intro1') }}">
+            <img src="{{ url_for('static', filename='images/main/logo.png') }}" alt="Logo" class="w-full h-full object-contain" style="display: block;">
+        </div>
+
+        <!-- Navigation -->
+        <nav class="w-full flex items-center justify-between relative bg-black" style="height: calc(56 / 1440 * var(--container-width)); padding: 0 calc(28 / 1440 * var(--container-width));">
+        </nav>
+        
+        <!-- Receipt Content Area -->
+        <!-- 여기에 receipt 페이지의 콘텐츠가 들어갑니다 -->
+        
+        <!-- Iron Background -->
+        <div class="absolute" style="left: calc(85 / 1440 * var(--container-width)); top: calc(155 / 1440 * var(--container-width)); width: calc(1272 / 1440 * var(--container-width)); height: calc(694 / 1440 * var(--container-width)); z-index: 1;">
+            <img src="{{ url_for('static', filename='images/main/iron-background.png') }}" alt="Iron Background" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Big Logo -->
+        <div class="absolute left-0" style="top: calc(884 / 1440 * var(--container-width)); width: calc(1440 / 1440 * var(--container-width)); height: calc(196 / 1440 * var(--container-width)); z-index: 2;">
+            <img src="{{ url_for('static', filename='images/main/big-logo.png') }}" alt="Big Logo" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Black Rectangle -->
+        <div class="absolute" style="left: calc(148 / 1440 * var(--container-width)); top: calc(383 / 1440 * var(--container-width)); width: calc(1147 / 1440 * var(--container-width)); height: calc(403 / 1440 * var(--container-width)); background-color: #000000; border-radius: calc(45 / 1440 * var(--container-width)); box-shadow: 0px calc(9 / 1440 * var(--container-width)) calc(4 / 1440 * var(--container-width)) rgba(0, 0, 0, 0.25); z-index: 3;">
+        </div>
+        
+        <!-- URL Text 1 -->
+        <div class="absolute" style="left: calc(159 / 1440 * var(--container-width)); top: calc(796 / 1440 * var(--container-width)); font-family: 'Geist', sans-serif; font-size: calc(20 / 1440 * var(--container-width)); font-weight: 600; line-height: 1.4; letter-spacing: calc(-0.02 * 20 / 1440 * var(--container-width)); color: #909090; text-align: left; z-index: 4;">
+            dream-artifact.com/archive/vanishing-dreams
+        </div>
+        
+        <!-- URL Text 2 -->
+        <div class="absolute" style="left: calc(1091 / 1440 * var(--container-width)); top: calc(796 / 1440 * var(--container-width)); font-family: 'Geist', sans-serif; font-size: calc(20 / 1440 * var(--container-width)); font-weight: 600; line-height: 1.4; letter-spacing: calc(-0.02 * 20 / 1440 * var(--container-width)); color: #909090; text-align: left; z-index: 4;">
+            dream-artifact.com
+        </div>
+        
+        <!-- QR Code (영수증 이미지 URL) -->
+        {% if qr_code_data_url is defined %}
+        <div class="absolute" style="left: calc(1054 / 1440 * var(--container-width)); top: calc(186 / 1440 * var(--container-width)); width: calc(120 / 1440 * var(--container-width)); height: calc(120 / 1440 * var(--container-width)); z-index: 20;">
+            <img src="{{ qr_code_data_url }}" alt="QR Code" class="w-full h-full object-contain">
+        </div>
+        {% endif %}
+        
+        <!-- Main Text -->
+        <div class="absolute" style="left: calc(202 / 1440 * var(--container-width)); top: calc(401 / 1440 * var(--container-width)); font-family: 'Geist', sans-serif; font-size: calc(32 / 1440 * var(--container-width)); font-weight: 600; line-height: 1.4; letter-spacing: calc(-0.02 * 32 / 1440 * var(--container-width)); color: #2D2D2D; opacity: 0.68; text-align: left; z-index: 5;">
+            This shop opens for things that were never meant to be stored.<br>
+            Memories that are too quiet to be shared, too awkward to name, or too<br>
+            fragile to carry any longer. Here, nothing is repaired or made useful.<br>
+            What arrives at the counter is gently received, exchanged, and<br>
+            reshaped, finding a second existence as something lighter, stranger, or<br>
+            dreamlike. The shop is run slowly, without urgency.<br>
+            There is no promise of closure, only permission. Kept by one person,<br>
+            it follows intuition rather than rules,guided by feeling, drifting sleep
+        </div>
+        
+        <!-- Receipt Illustration -->
+        <div class="absolute" style="left: calc(444 / 1440 * var(--container-width)); top: calc(169 / 1440 * var(--container-width)); width: calc(551 / 1440 * var(--container-width)); height: calc(809 / 1440 * var(--container-width)); z-index: 6;">
+            <img src="{{ url_for('static', filename='images/main/receipt-illustration.png') }}" alt="Receipt Illustration" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Barcode -->
+        <div class="absolute" style="left: calc(545 / 1440 * var(--container-width)); top: calc(892 / 1440 * var(--container-width)); width: calc(343 / 1440 * var(--container-width)); height: calc(34 / 1440 * var(--container-width)); z-index: 7;">
+            <img src="{{ url_for('static', filename='images/main/barcode.png') }}" alt="Barcode" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Background Logo 1 -->
+        <div class="absolute" style="left: calc(110 / 1440 * var(--container-width)); top: calc(279 / 1440 * var(--container-width)); width: calc(241.03 / 1440 * var(--container-width)); height: calc(87.48 / 1440 * var(--container-width)); z-index: 8;">
+            <img src="{{ url_for('static', filename='images/main/background-logo1.png') }}" alt="Background Logo 1" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Background Logo 2 -->
+        <div class="absolute" style="left: calc(181.13 / 1440 * var(--container-width)); top: calc(317.8 / 1440 * var(--container-width)); width: calc(219.79 / 1440 * var(--container-width)); height: calc(98.36 / 1440 * var(--container-width)); z-index: 9;">
+            <img src="{{ url_for('static', filename='images/main/background-logo2.png') }}" alt="Background Logo 2" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Background Logo 3 -->
+        <div class="absolute" style="left: calc(1232 / 1440 * var(--container-width)); top: calc(213 / 1440 * var(--container-width)); width: calc(177.39 / 1440 * var(--container-width)); height: calc(95.45 / 1440 * var(--container-width)); z-index: 10;">
+            <img src="{{ url_for('static', filename='images/main/background-logo3.png') }}" alt="Background Logo 3" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Background Logo 4 -->
+        <div class="absolute" style="left: calc(926 / 1440 * var(--container-width)); top: calc(658 / 1440 * var(--container-width)); width: calc(136.22 / 1440 * var(--container-width)); height: calc(47.12 / 1440 * var(--container-width)); transform: rotate(19.71deg); z-index: 11;">
+            <img src="{{ url_for('static', filename='images/main/background-logo4.png') }}" alt="Background Logo 4" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Basket Illustration 1 -->
+        <div class="absolute" style="left: calc(255 / 1440 * var(--container-width)); top: calc(440 / 1440 * var(--container-width)); width: calc(270 / 1440 * var(--container-width)); height: calc(285 / 1440 * var(--container-width)); z-index: 12;">
+            <img src="{{ url_for('static', filename='images/main/basket-illustration1.png') }}" alt="Basket Illustration 1" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Basket Illustration 2 -->
+        <div class="absolute" style="left: calc(910 / 1440 * var(--container-width)); top: calc(383 / 1440 * var(--container-width)); width: calc(199 / 1440 * var(--container-width)); height: calc(177 / 1440 * var(--container-width)); transform: rotate(-150deg); z-index: 13;">
+            <img src="{{ url_for('static', filename='images/main/basket-illustration2.png') }}" alt="Basket Illustration 2" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Bear Illustration -->
+        <div class="absolute" style="left: calc(826.89 / 1440 * var(--container-width)); top: calc(759.93 / 1440 * var(--container-width)); width: calc(268.83 / 1440 * var(--container-width)); height: calc(343.66 / 1440 * var(--container-width)); transform: rotate(15deg); z-index: 14;">
+            <img src="{{ url_for('static', filename='images/main/bear-illustration.png') }}" alt="Bear Illustration" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Line 1 -->
+        <div class="absolute" style="left: calc(552 / 1440 * var(--container-width)); top: calc(416 / 1440 * var(--container-width)); width: calc(336 / 1440 * var(--container-width)); height: calc(0.5 / 1440 * var(--container-width)); background-color: #000000; z-index: 15;">
+        </div>
+        
+        <!-- Line 2 -->
+        <div class="absolute" style="left: calc(552 / 1440 * var(--container-width)); top: calc(497 / 1440 * var(--container-width)); width: calc(336 / 1440 * var(--container-width)); height: calc(0.5 / 1440 * var(--container-width)); background-color: #000000; z-index: 15;">
+        </div>
+        
+        <!-- Line 3 -->
+        <div class="absolute" style="left: calc(552 / 1440 * var(--container-width)); top: calc(868 / 1440 * var(--container-width)); width: calc(336 / 1440 * var(--container-width)); height: calc(0.5 / 1440 * var(--container-width)); background-color: #000000; z-index: 15;">
+        </div>
+        
+        <!-- Line 4 (Dashed) -->
+        <div class="absolute" style="left: calc(552 / 1440 * var(--container-width)); top: calc(817 / 1440 * var(--container-width)); width: calc(336 / 1440 * var(--container-width)); height: calc(1 / 1440 * var(--container-width)); background-image: repeating-linear-gradient(to right, transparent 0px, transparent calc(2 / 1440 * var(--container-width)), #000000 calc(2 / 1440 * var(--container-width)), #000000 calc(10 / 1440 * var(--container-width)), transparent calc(10 / 1440 * var(--container-width)), transparent calc(14 / 1440 * var(--container-width))); z-index: 15;">
+        </div>
+        
+        <!-- Receipt Text: ITEM -->
+        <div class="absolute flex items-center" style="left: calc(554 / 1440 * var(--container-width)); top: calc(523 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(12 / 1440 * var(--container-width)); font-weight: 800; line-height: 1.5; letter-spacing: 0; color: #000000; text-align: left; z-index: 16;">
+            ITEM
+        </div>
+        
+        <!-- Receipt Text: PRICE -->
+        <div class="absolute flex items-center" style="left: calc(844 / 1440 * var(--container-width)); top: calc(523 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(12 / 1440 * var(--container-width)); font-weight: 800; line-height: 1.5; letter-spacing: 0; color: #000000; text-align: left; z-index: 16;">
+            PRICE
+        </div>
+        
+        <!-- Receipt Product Images -->
+        {% if receipt_products %}
+            {% set product_count = receipt_products|length %}
+            {% set available_width = 336 %}
+            {% set image_size = 56 %}
+            {% if product_count == 1 %}
+                {% set image1_x = 552 + (available_width - image_size) / 2 %}
+                {% set image_url1 = receipt_products[0].image_path.replace('static/', '') %}
+                <div class="absolute" style="left: calc({{ image1_x }} / 1440 * var(--container-width)); top: calc(429 / 1440 * var(--container-width)); width: calc({{ image_size }} / 1440 * var(--container-width)); height: calc({{ image_size }} / 1440 * var(--container-width)); z-index: 16;">
+                    <img src="{{ url_for('static', filename=image_url1) }}" alt="{{ receipt_products[0].name }}" class="w-full h-full object-cover">
+                </div>
+            {% elif product_count == 2 %}
+                {% set gap = (available_width - image_size * 2) / 3 %}
+                {% set image1_x = 552 + gap %}
+                {% set image2_x = image1_x + image_size + gap %}
+                {% set image_url1 = receipt_products[0].image_path.replace('static/', '') %}
+                {% set image_url2 = receipt_products[1].image_path.replace('static/', '') %}
+                <div class="absolute" style="left: calc({{ image1_x }} / 1440 * var(--container-width)); top: calc(429 / 1440 * var(--container-width)); width: calc({{ image_size }} / 1440 * var(--container-width)); height: calc({{ image_size }} / 1440 * var(--container-width)); z-index: 16;">
+                    <img src="{{ url_for('static', filename=image_url1) }}" alt="{{ receipt_products[0].name }}" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute" style="left: calc({{ image2_x }} / 1440 * var(--container-width)); top: calc(429 / 1440 * var(--container-width)); width: calc({{ image_size }} / 1440 * var(--container-width)); height: calc({{ image_size }} / 1440 * var(--container-width)); z-index: 16;">
+                    <img src="{{ url_for('static', filename=image_url2) }}" alt="{{ receipt_products[1].name }}" class="w-full h-full object-cover">
+                </div>
+            {% elif product_count == 3 %}
+                {% set gap = (available_width - image_size * 3) / 4 %}
+                {% set image1_x = 552 + gap %}
+                {% set image2_x = image1_x + image_size + gap %}
+                {% set image3_x = image2_x + image_size + gap %}
+                {% set image_url1 = receipt_products[0].image_path.replace('static/', '') %}
+                {% set image_url2 = receipt_products[1].image_path.replace('static/', '') %}
+                {% set image_url3 = receipt_products[2].image_path.replace('static/', '') %}
+                <div class="absolute" style="left: calc({{ image1_x }} / 1440 * var(--container-width)); top: calc(429 / 1440 * var(--container-width)); width: calc({{ image_size }} / 1440 * var(--container-width)); height: calc({{ image_size }} / 1440 * var(--container-width)); z-index: 16;">
+                    <img src="{{ url_for('static', filename=image_url1) }}" alt="{{ receipt_products[0].name }}" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute" style="left: calc({{ image2_x }} / 1440 * var(--container-width)); top: calc(429 / 1440 * var(--container-width)); width: calc({{ image_size }} / 1440 * var(--container-width)); height: calc({{ image_size }} / 1440 * var(--container-width)); z-index: 16;">
+                    <img src="{{ url_for('static', filename=image_url2) }}" alt="{{ receipt_products[1].name }}" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute" style="left: calc({{ image3_x }} / 1440 * var(--container-width)); top: calc(429 / 1440 * var(--container-width)); width: calc({{ image_size }} / 1440 * var(--container-width)); height: calc({{ image_size }} / 1440 * var(--container-width)); z-index: 16;">
+                    <img src="{{ url_for('static', filename=image_url3) }}" alt="{{ receipt_products[2].name }}" class="w-full h-full object-cover">
+                </div>
+            {% elif product_count == 4 %}
+                {% set gap = (available_width - image_size * 4) / 5 %}
+                {% set image1_x = 552 + gap %}
+                {% set image2_x = image1_x + image_size + gap %}
+                {% set image3_x = image2_x + image_size + gap %}
+                {% set image4_x = image3_x + image_size + gap %}
+                {% set image_url1 = receipt_products[0].image_path.replace('static/', '') %}
+                {% set image_url2 = receipt_products[1].image_path.replace('static/', '') %}
+                {% set image_url3 = receipt_products[2].image_path.replace('static/', '') %}
+                {% set image_url4 = receipt_products[3].image_path.replace('static/', '') %}
+                <div class="absolute" style="left: calc({{ image1_x }} / 1440 * var(--container-width)); top: calc(429 / 1440 * var(--container-width)); width: calc({{ image_size }} / 1440 * var(--container-width)); height: calc({{ image_size }} / 1440 * var(--container-width)); z-index: 16;">
+                    <img src="{{ url_for('static', filename=image_url1) }}" alt="{{ receipt_products[0].name }}" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute" style="left: calc({{ image2_x }} / 1440 * var(--container-width)); top: calc(429 / 1440 * var(--container-width)); width: calc({{ image_size }} / 1440 * var(--container-width)); height: calc({{ image_size }} / 1440 * var(--container-width)); z-index: 16;">
+                    <img src="{{ url_for('static', filename=image_url2) }}" alt="{{ receipt_products[1].name }}" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute" style="left: calc({{ image3_x }} / 1440 * var(--container-width)); top: calc(429 / 1440 * var(--container-width)); width: calc({{ image_size }} / 1440 * var(--container-width)); height: calc({{ image_size }} / 1440 * var(--container-width)); z-index: 16;">
+                    <img src="{{ url_for('static', filename=image_url3) }}" alt="{{ receipt_products[2].name }}" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute" style="left: calc({{ image4_x }} / 1440 * var(--container-width)); top: calc(429 / 1440 * var(--container-width)); width: calc({{ image_size }} / 1440 * var(--container-width)); height: calc({{ image_size }} / 1440 * var(--container-width)); z-index: 16;">
+                    <img src="{{ url_for('static', filename=image_url4) }}" alt="{{ receipt_products[3].name }}" class="w-full h-full object-cover">
+                </div>
+            {% elif product_count == 5 %}
+                {% set gap = (available_width - image_size * 5) / 6 %}
+                {% set image1_x = 552 + gap %}
+                {% set image2_x = image1_x + image_size + gap %}
+                {% set image3_x = image2_x + image_size + gap %}
+                {% set image4_x = image3_x + image_size + gap %}
+                {% set image5_x = image4_x + image_size + gap %}
+                {% set image_url1 = receipt_products[0].image_path.replace('static/', '') %}
+                {% set image_url2 = receipt_products[1].image_path.replace('static/', '') %}
+                {% set image_url3 = receipt_products[2].image_path.replace('static/', '') %}
+                {% set image_url4 = receipt_products[3].image_path.replace('static/', '') %}
+                {% set image_url5 = receipt_products[4].image_path.replace('static/', '') %}
+                <div class="absolute" style="left: calc({{ image1_x }} / 1440 * var(--container-width)); top: calc(429 / 1440 * var(--container-width)); width: calc({{ image_size }} / 1440 * var(--container-width)); height: calc({{ image_size }} / 1440 * var(--container-width)); z-index: 16;">
+                    <img src="{{ url_for('static', filename=image_url1) }}" alt="{{ receipt_products[0].name }}" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute" style="left: calc({{ image2_x }} / 1440 * var(--container-width)); top: calc(429 / 1440 * var(--container-width)); width: calc({{ image_size }} / 1440 * var(--container-width)); height: calc({{ image_size }} / 1440 * var(--container-width)); z-index: 16;">
+                    <img src="{{ url_for('static', filename=image_url2) }}" alt="{{ receipt_products[1].name }}" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute" style="left: calc({{ image3_x }} / 1440 * var(--container-width)); top: calc(429 / 1440 * var(--container-width)); width: calc({{ image_size }} / 1440 * var(--container-width)); height: calc({{ image_size }} / 1440 * var(--container-width)); z-index: 16;">
+                    <img src="{{ url_for('static', filename=image_url3) }}" alt="{{ receipt_products[2].name }}" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute" style="left: calc({{ image4_x }} / 1440 * var(--container-width)); top: calc(429 / 1440 * var(--container-width)); width: calc({{ image_size }} / 1440 * var(--container-width)); height: calc({{ image_size }} / 1440 * var(--container-width)); z-index: 16;">
+                    <img src="{{ url_for('static', filename=image_url4) }}" alt="{{ receipt_products[3].name }}" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute" style="left: calc({{ image5_x }} / 1440 * var(--container-width)); top: calc(429 / 1440 * var(--container-width)); width: calc({{ image_size }} / 1440 * var(--container-width)); height: calc({{ image_size }} / 1440 * var(--container-width)); z-index: 16;">
+                    <img src="{{ url_for('static', filename=image_url5) }}" alt="{{ receipt_products[4].name }}" class="w-full h-full object-cover">
+                </div>
+            {% endif %}
+        {% endif %}
+        
+        <!-- Receipt Product Names and Prices -->
+        {% if receipt_products %}
+            {% for product in receipt_products %}
+                {% if loop.index == 1 %}
+                    <div class="absolute flex items-center" style="left: calc(554 / 1440 * var(--container-width)); top: calc(560 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(13 / 1440 * var(--container-width)); font-weight: 700; line-height: 1.5; letter-spacing: 0; color: #000000; text-align: left; z-index: 16;">
+                        {{ product.name }} x {{ product.count }}
+                    </div>
+                    <div class="absolute flex items-center" style="left: calc(554 / 1440 * var(--container-width)); top: calc(583 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(9 / 1440 * var(--container-width)); font-weight: 400; line-height: 1.5; letter-spacing: 0; color: #828282; text-align: left; z-index: 16;">
+                        {{ product.subtitle }}
+                    </div>
+                    <div class="absolute flex items-center" style="left: calc(839 / 1440 * var(--container-width)); top: calc(560 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(11 / 1440 * var(--container-width)); font-weight: 600; line-height: 1.5; letter-spacing: 0; color: #000000; text-align: left; z-index: 16;">
+                        <span style="opacity: 0;">원</span> {{ product.total_price_formatted }}
+                    </div>
+                    <!-- Token Unit Image (상품 가격 1) -->
+                    <img src="{{ url_for('static', filename='images/main/token-unit-b.png') }}" alt="Token Unit" class="absolute" style="left: calc((839 - 5.5 + 11 * 0.15) / 1440 * var(--container-width)); top: calc((560 + 11 * 0.18 + 11 * 0.078) / 1440 * var(--container-width)); width: calc(11 / 1440 * var(--container-width)); height: auto; z-index: 17; pointer-events: none;">
+                {% elif loop.index == 2 %}
+                    <div class="absolute flex items-center" style="left: calc(554 / 1440 * var(--container-width)); top: calc(608 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(13 / 1440 * var(--container-width)); font-weight: 700; line-height: 1.5; letter-spacing: 0; color: #000000; text-align: left; z-index: 16;">
+                        {{ product.name }} x {{ product.count }}
+                    </div>
+                    <div class="absolute flex items-center" style="left: calc(554 / 1440 * var(--container-width)); top: calc(631 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(9 / 1440 * var(--container-width)); font-weight: 400; line-height: 1.5; letter-spacing: 0; color: #828282; text-align: left; z-index: 16;">
+                        {{ product.subtitle }}
+                    </div>
+                    <div class="absolute flex items-center" style="left: calc(839 / 1440 * var(--container-width)); top: calc(608 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(11 / 1440 * var(--container-width)); font-weight: 600; line-height: 1.5; letter-spacing: 0; color: #000000; text-align: left; z-index: 16;">
+                        <span style="opacity: 0;">원</span> {{ product.total_price_formatted }}
+                    </div>
+                    <!-- Token Unit Image (상품 가격 2) -->
+                    <img src="{{ url_for('static', filename='images/main/token-unit-b.png') }}" alt="Token Unit" class="absolute" style="left: calc((839 - 5.5 + 11 * 0.15) / 1440 * var(--container-width)); top: calc((560 + 11 * 0.18 + 11 * 0.078 + 48) / 1440 * var(--container-width)); width: calc(11 / 1440 * var(--container-width)); height: auto; z-index: 17; pointer-events: none;">
+                {% elif loop.index == 3 %}
+                    <div class="absolute flex items-center" style="left: calc(554 / 1440 * var(--container-width)); top: calc(656 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(13 / 1440 * var(--container-width)); font-weight: 700; line-height: 1.5; letter-spacing: 0; color: #000000; text-align: left; z-index: 16;">
+                        {{ product.name }} x {{ product.count }}
+                    </div>
+                    <div class="absolute flex items-center" style="left: calc(554 / 1440 * var(--container-width)); top: calc(679 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(9 / 1440 * var(--container-width)); font-weight: 400; line-height: 1.5; letter-spacing: 0; color: #828282; text-align: left; z-index: 16;">
+                        {{ product.subtitle }}
+                    </div>
+                    <div class="absolute flex items-center" style="left: calc(839 / 1440 * var(--container-width)); top: calc(656 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(11 / 1440 * var(--container-width)); font-weight: 600; line-height: 1.5; letter-spacing: 0; color: #000000; text-align: left; z-index: 16;">
+                        <span style="opacity: 0;">원</span> {{ product.total_price_formatted }}
+                    </div>
+                    <!-- Token Unit Image (상품 가격 3) -->
+                    <img src="{{ url_for('static', filename='images/main/token-unit-b.png') }}" alt="Token Unit" class="absolute" style="left: calc((839 - 5.5 + 11 * 0.15) / 1440 * var(--container-width)); top: calc((560 + 11 * 0.18 + 11 * 0.078 + 48 * 2) / 1440 * var(--container-width)); width: calc(11 / 1440 * var(--container-width)); height: auto; z-index: 17; pointer-events: none;">
+                {% elif loop.index == 4 %}
+                    <div class="absolute flex items-center" style="left: calc(554 / 1440 * var(--container-width)); top: calc(704 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(13 / 1440 * var(--container-width)); font-weight: 700; line-height: 1.5; letter-spacing: 0; color: #000000; text-align: left; z-index: 16;">
+                        {{ product.name }} x {{ product.count }}
+                    </div>
+                    <div class="absolute flex items-center" style="left: calc(554 / 1440 * var(--container-width)); top: calc(727 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(9 / 1440 * var(--container-width)); font-weight: 400; line-height: 1.5; letter-spacing: 0; color: #828282; text-align: left; z-index: 16;">
+                        {{ product.subtitle }}
+                    </div>
+                    <div class="absolute flex items-center" style="left: calc(839 / 1440 * var(--container-width)); top: calc(704 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(11 / 1440 * var(--container-width)); font-weight: 600; line-height: 1.5; letter-spacing: 0; color: #000000; text-align: left; z-index: 16;">
+                        <span style="opacity: 0;">원</span> {{ product.total_price_formatted }}
+                    </div>
+                    <!-- Token Unit Image (상품 가격 4) -->
+                    <img src="{{ url_for('static', filename='images/main/token-unit-b.png') }}" alt="Token Unit" class="absolute" style="left: calc((839 - 5.5 + 11 * 0.15) / 1440 * var(--container-width)); top: calc((560 + 11 * 0.18 + 11 * 0.078 + 48 * 3) / 1440 * var(--container-width)); width: calc(11 / 1440 * var(--container-width)); height: auto; z-index: 17; pointer-events: none;">
+                {% elif loop.index == 5 %}
+                    <div class="absolute flex items-center" style="left: calc(554 / 1440 * var(--container-width)); top: calc(752 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(13 / 1440 * var(--container-width)); font-weight: 700; line-height: 1.5; letter-spacing: 0; color: #000000; text-align: left; z-index: 16;">
+                        {{ product.name }} x {{ product.count }}
+                    </div>
+                    <div class="absolute flex items-center" style="left: calc(554 / 1440 * var(--container-width)); top: calc(775 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(9 / 1440 * var(--container-width)); font-weight: 400; line-height: 1.5; letter-spacing: 0; color: #828282; text-align: left; z-index: 16;">
+                        {{ product.subtitle }}
+                    </div>
+                    <div class="absolute flex items-center" style="left: calc(839 / 1440 * var(--container-width)); top: calc(752 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(11 / 1440 * var(--container-width)); font-weight: 600; line-height: 1.5; letter-spacing: 0; color: #000000; text-align: left; z-index: 16;">
+                        <span style="opacity: 0;">원</span> {{ product.total_price_formatted }}
+                    </div>
+                    <!-- Token Unit Image (상품 가격 5) -->
+                    <img src="{{ url_for('static', filename='images/main/token-unit-b.png') }}" alt="Token Unit" class="absolute" style="left: calc((839 - 5.5 + 11 * 0.15) / 1440 * var(--container-width)); top: calc((752 + 11 * 0.18) / 1440 * var(--container-width)); width: calc(11 / 1440 * var(--container-width)); height: auto; z-index: 17; pointer-events: none;">
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        
+        <!-- Receipt Text: TOTAL -->
+        <div class="absolute flex items-center" style="left: calc(552 / 1440 * var(--container-width)); top: calc(835 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(12 / 1440 * var(--container-width)); font-weight: 800; line-height: 1.5; letter-spacing: 0; color: #000000; text-align: left; z-index: 16;">
+            TOTAL
+        </div>
+        
+        <!-- Receipt Text: Total Price -->
+        <div class="absolute flex items-center" style="left: calc(831 / 1440 * var(--container-width)); top: calc(834 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-size: calc(12 / 1440 * var(--container-width)); font-weight: 700; line-height: 1.5; letter-spacing: 0; color: #000000; text-align: left; z-index: 16;">
+            <span style="opacity: 0;">원</span> {% if total_price_formatted is defined %}{{ total_price_formatted }}{% else %}0{% endif %}
+        </div>
+        <!-- Token Unit Image (총 가격) -->
+        <img src="{{ url_for('static', filename='images/main/token-unit-b.png') }}" alt="Token Unit" class="absolute" style="left: calc((831 - 6 + 12 * 0.15) / 1440 * var(--container-width)); top: calc((834 + 12 * 0.18 + 12 * 0.078) / 1440 * var(--container-width)); width: calc(12 / 1440 * var(--container-width)); height: auto; z-index: 17; pointer-events: none;">
+        
+        <!-- Objects -->
+        <div class="absolute left-0" style="bottom: calc(914 / 1440 * var(--container-width)); width: calc(1440 / 1440 * var(--container-width)); height: calc(390 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/objects.png') }}" alt="Objects" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- About Text -->
+        <div class="absolute" style="left: calc(80 / 1440 * var(--container-width)); bottom: calc(534 / 1440 * var(--container-width)); width: calc(1280 / 1440 * var(--container-width)); height: calc(380 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/about-text.png') }}" alt="About Text" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Footer -->
+        <div class="absolute left-0 w-full" style="bottom: calc(47 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/footer.png') }}" alt="Footer" class="w-full h-auto">
+        </div>
+    </div>
+    <!-- 커스텀 커서 스크립트 -->
+    <!-- 커스텀 모달 스크립트 -->
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <!-- 로고 클릭 시 초기 화면으로 돌아가기 -->
+    <script src="{{ url_for('static', filename='js/intro-common.js') }}"></script>
+</body>
+</html>

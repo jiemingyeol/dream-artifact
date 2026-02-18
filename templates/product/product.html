@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ko" 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Artifact - Product {{ product.id }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main-base.css') }}">
+    <style>
+        /* 토글 애니메이션을 위한 스타일 */
+        /* JavaScript에서 직접 애니메이션 처리하므로 transition 제거 */
+        /* .toggle-section-1, .toggle-section-2, .toggle-section-3, .main-container는 JavaScript에서 직접 애니메이션 처리 */
+        .toggle-hide-1,
+        .toggle-hide-2,
+        .toggle-hide-3 {
+            transition: opacity 0.5s ease, visibility 0.5s ease, max-height 0.5s ease, margin 0.5s ease, padding 0.5s ease;
+            overflow: hidden;
+        }
+    </style>
+    <style>
+        @font-face {
+            font-family: 'Geist';
+            src: url('{{ url_for("static", filename="fonts/Geist-SemiBold.ttf") }}') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Inter';
+            src: url('{{ url_for("static", filename="fonts/Inter_18pt-Bold.ttf") }}') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Inter';
+            src: url('{{ url_for("static", filename="fonts/Inter_24pt-Regular.ttf") }}') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Inter';
+            src: url('{{ url_for("static", filename="fonts/Inter_18pt-Medium.ttf") }}') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Inter';
+            src: url('{{ url_for("static", filename="fonts/Inter_24pt-SemiBold.ttf") }}') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+    </style>
+    <script src="{{ url_for('static', filename='js/main-base.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/image-preloader.js') }}"></script>
+</head>
+<body >
+    <div class="main-container" style="height: calc(4550 / 1440 * var(--container-width));">
+        <!-- Marquee -->
+        <div class="w-full flex items-center justify-center relative bg-black" style="height: calc(53 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/marquee.png') }}" alt="Marquee" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Logo -->
+        <!-- 위치: (28, 70), 크기: 99×46 - intro와 동일한 위치 -->
+        <div class="absolute cursor-pointer" style="left: calc(28 / 1440 * var(--container-width)); top: calc(60 / 1440 * var(--container-width)); width: calc(99 / 1440 * var(--container-width)); height: calc(46 / 1440 * var(--container-width)); z-index: 1000;" id="logoLink" data-intro1-url="{{ url_for('intro1') }}">
+            <img src="{{ url_for('static', filename='images/main/logo.png') }}" alt="Logo" class="w-full h-full object-contain" style="display: block;">
+        </div>
+
+        <!-- Token -->
+        <!-- 위치: (144, 70) -->
+        <div class="absolute flex items-center text-white" style="left: calc(144 / 1440 * var(--container-width)); top: calc(70 / 1440 * var(--container-width)); font-family: 'Geist', sans-serif; font-size: calc(20 / 1440 * var(--container-width)); font-weight: 600; letter-spacing: calc(-0.05 * 20 / 1440 * var(--container-width)); line-height: 1.4; z-index: 1000;">
+            <span>보유 토큰: <span style="opacity: 0;">원</span> {{ customer_token }}</span>
+        </div>
+        <!-- Token Unit Image (보유토큰) -->
+        <img src="{{ url_for('static', filename='images/main/token-unit-w.png') }}" alt="Token Unit" class="absolute" style="left: calc((144 + 60 - 10 + 5.5 + 20) / 1440 * var(--container-width)); top: calc((70 + 20 * 0.12 + 20 * 0.05 + 0.5) / 1440 * var(--container-width)); width: calc(20 / 1440 * var(--container-width)); height: auto; z-index: 1001; pointer-events: none;">
+
+        <!-- Navigation -->
+        <nav class="w-full flex items-center justify-end relative bg-black" style="height: calc(56 / 1440 * var(--container-width)); padding: 0 calc(28 / 1440 * var(--container-width));">
+            <!-- Navigation Buttons -->
+            <div class="flex items-center" style="gap: calc(8 / 1440 * var(--container-width));">
+                <button id="home-button" class="border-none transition-opacity hover:opacity-80 active:opacity-60 p-0 bg-transparent" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                    <img src="{{ url_for('static', filename='images/main/home-button.png') }}" alt="Home" class="h-full w-auto object-contain" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                </button>
+                <button id="shop-button" class="border-none transition-opacity hover:opacity-80 active:opacity-60 p-0 bg-transparent" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                    <img src="{{ url_for('static', filename='images/main/shop-button.png') }}" alt="Shop" class="h-full w-auto object-contain" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                </button>
+                <button id="cart-button" class="border-none transition-opacity hover:opacity-80 active:opacity-60 p-0 bg-transparent relative" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                    <img src="{{ url_for('static', filename='images/main/cart-button.png') }}" alt="Cart" class="h-full w-auto object-contain" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                    <!-- Cart Badge -->
+                    <div class="absolute flex items-center justify-center rounded-full text-white" style="bottom: calc(33 / 1440 * var(--container-width)); left: calc(100% - 13 / 1440 * var(--container-width)); width: calc(20 / 1440 * var(--container-width)); height: calc(20 / 1440 * var(--container-width)); background-color: #FF3A3A; font-family: 'Geist', sans-serif; font-size: calc(12 / 1440 * var(--container-width)); font-weight: 600; line-height: 1.4; letter-spacing: calc(-0.02 * 12 / 1440 * var(--container-width));">
+                        {{ cart_count }}
+                    </div>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Arrow -->
+        <div class="absolute cursor-pointer arrow-button" style="left: calc(70 / 1440 * var(--container-width)); top: calc(167 / 1440 * var(--container-width)); width: calc(43 / 1440 * var(--container-width)); height: calc(43 / 1440 * var(--container-width)); padding: calc(10 / 1440 * var(--container-width)); display: flex; align-items: center; justify-content: center;">
+            <img src="{{ url_for('static', filename='images/product/arrow-button.png') }}" alt="Arrow" class="w-full h-auto object-contain">
+        </div>
+        
+        <!-- Name -->
+        <div class="absolute" style="left: calc(153 / 1440 * var(--container-width)); top: calc(227 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 700; font-size: calc(64 / 1440 * var(--container-width)); letter-spacing: calc(-0.02 * 64 / 1440 * var(--container-width)); line-height: normal; color: #FFFFFF;">
+            {{ product.name }}
+        </div>
+        
+        <!-- Subtitle -->
+        <div class="absolute" style="left: calc(153 / 1440 * var(--container-width)); top: calc(328 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(24 / 1440 * var(--container-width)); letter-spacing: 0; line-height: 1.5; color: #828282;">
+            {{ product.subtitle }}
+        </div>
+        
+        <!-- Description -->
+        <div id="product-description" class="absolute" style="left: calc(153 / 1440 * var(--container-width)); top: calc(364 / 1440 * var(--container-width)); width: calc(592 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 500; font-size: calc(20 / 1440 * var(--container-width)); line-height: 1.67; letter-spacing: 0; color: #FFFFFF; white-space: pre-line; word-wrap: break-word; overflow-wrap: break-word;">
+{{ product.description }}
+        </div>
+        
+        <!-- Product Image -->
+        <div class="absolute overflow-hidden" style="left: calc(817 / 1440 * var(--container-width)); top: calc(250 / 1440 * var(--container-width)); width: calc(500 / 1440 * var(--container-width)); height: calc(500 / 1440 * var(--container-width)); border-radius: calc(35 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename=product.image_path.replace('static/', '')) }}" alt="Product Image" class="w-full h-full object-cover">
+        </div>
+        
+        <!-- Price -->
+        <div id="product-price" class="absolute" style="left: calc(153 / 1440 * var(--container-width)); top: calc(1050 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 700; font-size: calc(40 / 1440 * var(--container-width)); letter-spacing: calc(-0.02 * 40 / 1440 * var(--container-width)); line-height: normal; color: #FFFFFF;">
+            <span style="opacity: 0;">원</span> {{ price_formatted }}
+        </div>
+        <!-- Token Unit Image (상품 가격) -->
+        <!-- 초기 위치: 1050 + 40 * 0.14 - 40 * 2.5 = 1050 + 5.6 - 100 = 955.6 -->
+        <img id="product-price-token-unit" src="{{ url_for('static', filename='images/main/token-unit-w.png') }}" alt="Token Unit" class="absolute" style="left: calc((153 - 20 + 13) / 1440 * var(--container-width)); top: calc(955.6 / 1440 * var(--container-width)); width: calc(40 / 1440 * var(--container-width)); height: auto; z-index: 11; pointer-events: none;">
+        
+        <!-- Icon Star -->
+        <div class="absolute" style="left: calc(358 / 1440 * var(--container-width)); top: calc(1062 / 1440 * var(--container-width)); width: calc(132 / 1440 * var(--container-width)); height: calc(24 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/product/icon-star.png') }}" alt="Icon Star" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Text Review -->
+        <div class="absolute" style="left: calc(503 / 1440 * var(--container-width)); top: calc(1063 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 700; font-size: calc(20 / 1440 * var(--container-width)); letter-spacing: calc(-0.02 * 20 / 1440 * var(--container-width)); line-height: normal; color: #FFFFFF;">
+            5.0 ({{ product.purchase_count }})
+        </div>
+        
+        <!-- Cart Add Button (hover 시 cart-add-button-hover 이미지로 변경) -->
+        <div class="absolute cart-add-button cursor-pointer group" style="left: calc(365 / 1440 * var(--container-width)); top: calc(1127 / 1440 * var(--container-width)); width: calc(144 / 1440 * var(--container-width)); height: calc(60 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/product/cart-add-button.png') }}" alt="Cart Add Button" class="w-full h-full object-contain absolute inset-0 transition-opacity duration-200 group-hover:opacity-0">
+            <img src="{{ url_for('static', filename='images/product/cart-add-button-hover.png') }}" alt="Cart Add Button Hover" class="w-full h-full object-contain absolute inset-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+        </div>
+        
+        <!-- Count Buttons -->
+        <!-- Count Button Left -->
+        <div class="absolute cursor-pointer count-button-left" style="left: calc(153 / 1440 * var(--container-width)); top: calc(1127 / 1440 * var(--container-width)); width: calc(63.32 / 1440 * var(--container-width)); height: calc(63 / 1440 * var(--container-width)); z-index: 1;">
+            <img src="{{ url_for('static', filename='images/product/count-button-left.png') }}" alt="Count Button Left" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Count Button Right -->
+        <div class="absolute cursor-pointer count-button-right" style="left: calc(281 / 1440 * var(--container-width)); top: calc(1127 / 1440 * var(--container-width)); width: calc(63.32 / 1440 * var(--container-width)); height: calc(63 / 1440 * var(--container-width)); z-index: 1;">
+            <img src="{{ url_for('static', filename='images/product/count-button-right.png') }}" alt="Count Button Right" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Count Button Middle (가장 위에) -->
+        <div class="absolute" style="left: calc(203 / 1440 * var(--container-width)); top: calc(1127 / 1440 * var(--container-width)); width: calc(90 / 1440 * var(--container-width)); height: calc(63 / 1440 * var(--container-width)); z-index: 2;">
+            <img src="{{ url_for('static', filename='images/product/count-button-middle.png') }}" alt="Count Button Middle" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Count Text Left -->
+        <div class="absolute count-text-left count-button-left-hover-area cursor-pointer" id="count-text-left" style="left: calc(179 / 1440 * var(--container-width)); top: calc(1141 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(26 / 1440 * var(--container-width)); letter-spacing: calc(-0.02 * 26 / 1440 * var(--container-width)); line-height: normal; color: #7F7F7F; z-index: 3;">
+            -
+        </div>
+        
+        <!-- Count Text Right -->
+        <div class="absolute count-text-right count-button-right-hover-area cursor-pointer" style="left: calc(300 / 1440 * var(--container-width)); top: calc(1141 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(26 / 1440 * var(--container-width)); letter-spacing: calc(-0.02 * 26 / 1440 * var(--container-width)); line-height: normal; color: #202125; z-index: 3;">
+            +
+        </div>
+        
+        <!-- Count Text Middle -->
+        <div class="absolute count-text-middle cursor-pointer" id="count-text-middle" style="left: calc(241 / 1440 * var(--container-width)); top: calc(1143 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(26 / 1440 * var(--container-width)); letter-spacing: calc(-0.02 * 26 / 1440 * var(--container-width)); line-height: normal; color: #202125; z-index: 3;">
+            1
+        </div>
+        
+        <!-- 구분선 1 -->
+        <div class="absolute" style="left: calc(151 / 1440 * var(--container-width)); top: calc(1352 / 1440 * var(--container-width)); width: calc(1138 / 1440 * var(--container-width)); height: calc(1 / 1440 * var(--container-width)); background-color: #FFFFFF;"></div>
+        
+        <!-- Toggle Text 1 -->
+        <div class="absolute toggle-text-1-wrapper cursor-pointer" style="left: calc(1032 / 1440 * var(--container-width)); top: calc(1329 / 1440 * var(--container-width)); width: calc(400 / 1440 * var(--container-width)); height: calc(120 / 1440 * var(--container-width));">
+            <div class="toggle-text-1 absolute" style="left: calc(200 / 1440 * var(--container-width)); top: calc(40 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(40 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF; transition: transform 0.3s ease;">
+                -
+            </div>
+        </div>
+        
+        <!-- Notice Main -->
+        <div class="absolute notice-main" style="left: calc(151 / 1440 * var(--container-width)); top: calc(1275 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 600; font-size: calc(32 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF;">
+            제품 상세 설명
+        </div>
+        
+        <!-- Notice Method 1 -->
+        <div class="absolute notice-method-1" style="left: calc(151 / 1440 * var(--container-width)); top: calc(1384 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(24 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF;">
+            사용 방법
+        </div>
+        
+        <!-- Notice Method 2 -->
+        <div class="absolute notice-method-2 toggle-hide-1" style="left: calc(473 / 1440 * var(--container-width)); top: calc(1450 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 500; font-size: calc(22 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF;">
+            제품의 효력을 위해 사용 전 사용 방법을 꼭 확인해 주세요
+        </div>
+        
+        <!-- Icon 1 -->
+        <div class="absolute toggle-hide-1" style="left: calc(223 / 1440 * var(--container-width)); top: calc(1515 / 1440 * var(--container-width)); width: calc(176 / 1440 * var(--container-width)); height: calc(176 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/product/icon-1.png') }}" alt="Icon 1" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Icon 2 -->
+        <div class="absolute toggle-hide-1" style="left: calc(494 / 1440 * var(--container-width)); top: calc(1515 / 1440 * var(--container-width)); width: calc(216 / 1440 * var(--container-width)); height: calc(216 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/product/icon-2.png') }}" alt="Icon 2" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Icon 3 -->
+        <div class="absolute toggle-hide-1" style="left: calc(779 / 1440 * var(--container-width)); top: calc(1515 / 1440 * var(--container-width)); width: calc(204 / 1440 * var(--container-width)); height: calc(204 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/product/icon-3.png') }}" alt="Icon 3" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Icon 4 -->
+        <div class="absolute toggle-hide-1" style="left: calc(1052 / 1440 * var(--container-width)); top: calc(1523 / 1440 * var(--container-width)); width: calc(200 / 1440 * var(--container-width)); height: calc(200 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/product/icon-4.png') }}" alt="Icon 4" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Text Icon 1 -->
+        {% if guide_display[0] %}
+        <div class="absolute text-icon-1 toggle-hide-1" style="left: calc(251 / 1440 * var(--container-width)); top: calc(1737 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(20 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF;">
+            {{ guide_display[0] }}
+        </div>
+        {% endif %}
+        
+        <!-- Text Icon 2 -->
+        {% if guide_display[1] %}
+        <div class="absolute text-icon-2 toggle-hide-1" style="left: calc(517 / 1440 * var(--container-width)); top: calc(1737 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(20 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF;">
+            {{ guide_display[1] }}
+        </div>
+        {% endif %}
+        
+        <!-- Text Icon 3 -->
+        {% if guide_display[2] %}
+        <div class="absolute text-icon-3 toggle-hide-1" style="left: calc(815 / 1440 * var(--container-width)); top: calc(1737 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(20 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF;">
+            {{ guide_display[2] }}
+        </div>
+        {% endif %}
+        
+        <!-- Text Icon 4 -->
+        {% if guide_display[3] %}
+        <div class="absolute text-icon-4 toggle-hide-1" style="left: calc(1063 / 1440 * var(--container-width)); top: calc(1737 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(20 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF;">
+            {{ guide_display[3] }}
+        </div>
+        {% endif %}
+        
+        <!-- 구분선 2 -->
+        <div class="absolute toggle-section-1" style="left: calc(151 / 1440 * var(--container-width)); top: calc(1860 / 1440 * var(--container-width)); width: calc(1138 / 1440 * var(--container-width)); height: calc(1 / 1440 * var(--container-width)); background-color: #FFFFFF;"></div>
+        
+        <!-- Toggle Text 2 -->
+        <div class="absolute toggle-text-2-wrapper cursor-pointer toggle-section-1" style="left: calc(1032 / 1440 * var(--container-width)); top: calc(1852 / 1440 * var(--container-width)); width: calc(400 / 1440 * var(--container-width)); height: calc(120 / 1440 * var(--container-width));">
+            <div class="toggle-text-2 absolute" style="left: calc(200 / 1440 * var(--container-width)); top: calc(40 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(40 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF; transition: transform 0.3s ease;">
+                -
+            </div>
+        </div>
+        
+        <!-- Notice Ingredient -->
+        <div class="absolute notice-ingredient toggle-section-1" style="left: calc(151 / 1440 * var(--container-width)); top: calc(1901 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(24 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF;">
+            [KR] 성분표
+        </div>
+        
+        <!-- Text Ingredient 1 -->
+        {% if product.ingredients|length > 0 %}
+        <div class="absolute text-ingredient-1 toggle-hide-2 toggle-section-1" style="left: calc(218 / 1440 * var(--container-width)); top: calc(2060 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(20 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF;">
+            {{ product.ingredients[0] }}
+        </div>
+        {% endif %}
+        
+        <!-- Text Ingredient 2 -->
+        {% if product.ingredients|length > 1 %}
+        <div class="absolute text-ingredient-2 toggle-hide-2 toggle-section-1" style="left: calc(439 / 1440 * var(--container-width)); top: calc(2060 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(20 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF;">
+            {{ product.ingredients[1] }}
+        </div>
+        {% endif %}
+        
+        <!-- Text Ingredient 3 -->
+        {% if product.ingredients|length > 2 %}
+        <div class="absolute text-ingredient-3 toggle-hide-2 toggle-section-1" style="left: calc(735 / 1440 * var(--container-width)); top: calc(2060 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(20 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF;">
+            {{ product.ingredients[2] }}
+        </div>
+        {% endif %}
+        
+        <!-- Text Ingredient 4 -->
+        {% if product.ingredients|length > 3 %}
+        <div class="absolute text-ingredient-4 toggle-hide-2 toggle-section-1" style="left: calc(1069 / 1440 * var(--container-width)); top: calc(2060 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(20 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF;">
+            {{ product.ingredients[3] }}
+        </div>
+        {% endif %}
+        
+        <!-- 구분선 3 -->
+        <div class="absolute toggle-section-1 toggle-section-2" style="left: calc(151 / 1440 * var(--container-width)); top: calc(2253 / 1440 * var(--container-width)); width: calc(1138 / 1440 * var(--container-width)); height: calc(1 / 1440 * var(--container-width)); background-color: #FFFFFF;"></div>
+        
+        <!-- Toggle Text 3 -->
+        <div class="absolute toggle-text-3-wrapper cursor-pointer toggle-section-1 toggle-section-2" style="left: calc(1032 / 1440 * var(--container-width)); top: calc(2236 / 1440 * var(--container-width)); width: calc(400 / 1440 * var(--container-width)); height: calc(120 / 1440 * var(--container-width));">
+            <div class="toggle-text-3 absolute" style="left: calc(200 / 1440 * var(--container-width)); top: calc(40 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(40 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF; transition: transform 0.3s ease;">
+                -
+            </div>
+        </div>
+        
+        <!-- Notice FAQ -->
+        <div class="absolute notice-faq toggle-section-1 toggle-section-2" style="left: calc(151 / 1440 * var(--container-width)); top: calc(2288 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 400; font-size: calc(24 / 1440 * var(--container-width)); line-height: 1.5; letter-spacing: 0; color: #FFFFFF;">
+            자주 묻는 질문
+        </div>
+        
+        <!-- FAQ Text Image -->
+        <div class="absolute toggle-hide-3 toggle-section-1 toggle-section-2" id="faq-text-image" style="left: calc(151 / 1440 * var(--container-width)); top: calc(2424 / 1440 * var(--container-width)); width: calc(1104 / 1440 * var(--container-width)); height: calc(1449 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/product/faq-text.png') }}" alt="FAQ Text" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- 구분선 4 -->
+        <div class="absolute toggle-section-1 toggle-section-2 toggle-section-3" style="left: calc(151 / 1440 * var(--container-width)); top: calc(3977 / 1440 * var(--container-width)); width: calc(1138 / 1440 * var(--container-width)); height: calc(1 / 1440 * var(--container-width)); background-color: #FFFFFF;"></div>
+        
+        <!-- 콘텐츠가 여기에 들어갑니다 -->
+        
+        <!-- Footer -->
+        <div class="absolute left-0 w-full toggle-section-1 toggle-section-2 toggle-section-3" id="footer" style="bottom: calc(47 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/footer.png') }}" alt="Footer" class="w-full h-auto">
+        </div>
+    </div>
+    <!-- Description 높이 기반 동적 위치 조정 -->
+    <script>
+        (function() {
+            // 페이지 로드 후 description 높이 측정
+            window.addEventListener('load', function() {
+                // description 요소 찾기
+                const descriptionElement = document.getElementById('product-description');
+                
+                if (!descriptionElement) return;
+                
+                // description의 실제 높이 측정 (px 단위)
+                const descriptionHeight = descriptionElement.offsetHeight;
+                
+                // 제품 12번 기준값
+                const baseDescriptionHeight = 835.0; // 제품 12번의 description 높이 (1440px 기준)
+                const baseDescriptionTop = 364; // description의 top 위치
+                const basePriceY = 1100; // 제품 12번에서 price의 y 위치
+                
+                // 현재 화면 크기에서의 1440px 기준 높이로 변환
+                const containerWidth = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--container-width')) || window.innerWidth;
+                const scaleFactor = containerWidth / 1440;
+                const descriptionHeightIn1440 = descriptionHeight / scaleFactor;
+                
+                // 높이 차이 계산 (description이 낮으면 양수, 높으면 음수)
+                const heightDiff = baseDescriptionHeight - descriptionHeightIn1440;
+                
+                // 제품 12번 기준 요소들의 y 위치 (1440px 기준)
+                // 현재 HTML의 baseY에서 제품 12번 기준으로의 오프셋 계산
+                const priceBaseYInHTML = 1050; // 현재 HTML의 price y 위치
+                const priceOffset = basePriceY - priceBaseYInHTML; // 1100 - 1050 = 50
+                
+                // 토큰 유닛 이미지의 제품 12번 기준 y 위치 계산
+                // 현재 HTML에서 price y: 1050, 토큰 유닛 y: 1050 + 40 * 0.14 - 40 * 2.5 = 955.6
+                // 제품 12번 기준 price y: 1100, 토큰 유닛 y: 1100 + 40 * 0.14 - 40 * 2.5 = 1005.6
+                const tokenUnitBaseY = basePriceY + 40 * 0.14 - 40 * 2.5; // price와 동일한 오프셋 적용
+                
+                // 조정할 요소들의 선택자와 제품 12번 기준 y 위치 (1440px 기준)
+                const elementsToAdjust = [
+                    { selector: '#product-price', baseY: basePriceY },
+                    { selector: '#product-price-token-unit', baseY: tokenUnitBaseY, isTokenUnit: true },
+                    { selector: 'img[alt="Icon Star"]', baseY: 1062 + priceOffset, getParent: true },
+                    { selector: '.absolute', baseY: 1063 + priceOffset, test: (el) => el.textContent && el.textContent.includes('5.0') && el.textContent.includes('(') },
+                    { selector: '.cart-add-button', baseY: 1127 + priceOffset },
+                    { selector: '.count-button-left', baseY: 1127 + priceOffset },
+                    { selector: '.count-button-right', baseY: 1127 + priceOffset },
+                    { selector: '.absolute', baseY: 1127 + priceOffset, test: (el) => el.querySelector('img[alt="Count Button Middle"]') },
+                    { selector: '#count-text-left', baseY: 1141 + priceOffset },
+                    { selector: '.count-text-right', baseY: 1141 + priceOffset },
+                    { selector: '#count-text-middle', baseY: 1143 + priceOffset },
+                    { selector: '.absolute', baseY: 1352 + priceOffset, test: (el) => el.style.backgroundColor === 'rgb(255, 255, 255)' && el.style.top && el.style.top.includes('1352') },
+                    { selector: '.toggle-text-1-wrapper', baseY: 1329 + priceOffset },
+                    { selector: '.notice-main', baseY: 1275 + priceOffset },
+                    { selector: '.notice-method-1', baseY: 1384 + priceOffset },
+                    { selector: '.notice-method-2', baseY: 1450 + priceOffset },
+                    { selector: 'img[alt="Icon 1"]', baseY: 1515 + priceOffset, getParent: true },
+                    { selector: 'img[alt="Icon 2"]', baseY: 1515 + priceOffset, getParent: true },
+                    { selector: 'img[alt="Icon 3"]', baseY: 1515 + priceOffset, getParent: true },
+                    { selector: 'img[alt="Icon 4"]', baseY: 1523 + priceOffset, getParent: true },
+                    { selector: '.text-icon-1', baseY: 1737 + priceOffset },
+                    { selector: '.text-icon-2', baseY: 1737 + priceOffset },
+                    { selector: '.text-icon-3', baseY: 1737 + priceOffset },
+                    { selector: '.text-icon-4', baseY: 1737 + priceOffset },
+                    { selector: '.toggle-section-1', baseY: 1860 + priceOffset, test: (el) => el.style.backgroundColor === 'rgb(255, 255, 255)' && el.style.top && el.style.top.includes('1860') },
+                    { selector: '.toggle-text-2-wrapper', baseY: 1852 + priceOffset },
+                    { selector: '.notice-ingredient', baseY: 1901 + priceOffset },
+                    { selector: '.text-ingredient-1', baseY: 2060 + priceOffset },
+                    { selector: '.text-ingredient-2', baseY: 2060 + priceOffset },
+                    { selector: '.text-ingredient-3', baseY: 2060 + priceOffset },
+                    { selector: '.text-ingredient-4', baseY: 2060 + priceOffset },
+                    { selector: '.toggle-section-1.toggle-section-2', baseY: 2253 + priceOffset, test: (el) => el.style.backgroundColor === 'rgb(255, 255, 255)' && el.style.top && el.style.top.includes('2253') },
+                    { selector: '.toggle-text-3-wrapper', baseY: 2236 + priceOffset },
+                    { selector: '.notice-faq', baseY: 2288 + priceOffset },
+                    { selector: '#faq-text-image', baseY: 2424 + priceOffset },
+                    { selector: '.toggle-section-1.toggle-section-2.toggle-section-3', baseY: 3977 + priceOffset, test: (el) => el.style.backgroundColor === 'rgb(255, 255, 255)' && el.style.top && el.style.top.includes('3977') }
+                ];
+                
+                // 각 요소의 y 위치 조정
+                elementsToAdjust.forEach(config => {
+                    let elements = [];
+                    
+                    if (config.selector.startsWith('#')) {
+                        // ID 선택자
+                        const el = document.querySelector(config.selector);
+                        if (el) elements = [el];
+                    } else if (config.selector.startsWith('.')) {
+                        // 클래스 선택자
+                        elements = Array.from(document.querySelectorAll(config.selector));
+                    } else {
+                        // 태그 선택자
+                        elements = Array.from(document.querySelectorAll(config.selector));
+                    }
+                    
+                    // test 함수가 있으면 필터링
+                    if (config.test) {
+                        elements = elements.filter(config.test);
+                    }
+                    
+                    elements.forEach(element => {
+                        // getParent가 true면 부모 요소 사용
+                        const targetElement = config.getParent ? element.parentElement : element;
+                        if (!targetElement || !targetElement.style) return;
+                        
+                        // 토큰 유닛 이미지인 경우: 이미지 로드 후 높이 측정하여 위치 조정
+                        if (config.isTokenUnit && targetElement.tagName === 'IMG') {
+                            const adjustTokenUnitPosition = () => {
+                                // 현재 top 값 추출
+                                const currentStyle = targetElement.getAttribute('style') || '';
+                                const topMatch = currentStyle.match(/top:\s*calc\((\d+(?:\.\d+)?)\s*\/\s*1440\s*\*\s*var\(--container-width\)\)/);
+                                
+                                if (topMatch) {
+                                    // 이미지 높이 측정 (1440px 기준으로 변환)
+                                    const imageHeight = targetElement.offsetHeight || targetElement.naturalHeight || 0;
+                                    if (imageHeight > 0) {
+                                        const imageHeightIn1440 = imageHeight / scaleFactor;
+                                        // description이 낮으면 요소는 위로, 높으면 아래로 이동
+                                        // heightDiff가 양수면 (description이 낮음) 요소는 위로 이동해야 하므로 빼기
+                                        // 모든 요소를 추가로 150픽셀 아래로 이동
+                                        // 이미지 높이의 2.5배만큼 추가로 아래로 이동
+                                        const newTop = config.baseY - heightDiff + 150 + imageHeightIn1440 * 2.5;
+                                        
+                                        // 스타일 업데이트
+                                        const newStyle = currentStyle.replace(
+                                            /top:\s*calc\([\d.]+\s*\/\s*1440\s*\*\s*var\(--container-width\)\)/,
+                                            `top: calc(${newTop} / 1440 * var(--container-width))`
+                                        );
+                                        targetElement.setAttribute('style', newStyle);
+                                    }
+                                }
+                            };
+                            
+                            // 이미지가 이미 로드되었는지 확인
+                            if (targetElement.complete && targetElement.naturalHeight > 0) {
+                                adjustTokenUnitPosition();
+                            } else {
+                                // 이미지 로드 대기
+                                targetElement.addEventListener('load', adjustTokenUnitPosition);
+                                // 로드 실패 시에도 시도 (기본 높이 사용)
+                                targetElement.addEventListener('error', adjustTokenUnitPosition);
+                            }
+                            return;
+                        }
+                        
+                        // 일반 요소 처리
+                        // 현재 top 값 추출
+                        const currentStyle = targetElement.getAttribute('style') || '';
+                        const topMatch = currentStyle.match(/top:\s*calc\((\d+(?:\.\d+)?)\s*\/\s*1440\s*\*\s*var\(--container-width\)\)/);
+                        
+                        if (topMatch) {
+                            const currentTop = parseFloat(topMatch[1]);
+                            // description이 낮으면 요소는 위로, 높으면 아래로 이동
+                            // heightDiff가 양수면 (description이 낮음) 요소는 위로 이동해야 하므로 빼기
+                            // 모든 요소를 추가로 150픽셀 아래로 이동
+                            const newTop = config.baseY - heightDiff + 150;
+                            
+                            // 스타일 업데이트
+                            const newStyle = currentStyle.replace(
+                                /top:\s*calc\([\d.]+\s*\/\s*1440\s*\*\s*var\(--container-width\)\)/,
+                                `top: calc(${newTop} / 1440 * var(--container-width))`
+                            );
+                            targetElement.setAttribute('style', newStyle);
+                        }
+                    });
+                });
+            });
+        })();
+    </script>
+    <!-- Ingredient 텍스트 동적 위치 계산 -->
+    <script>
+        (function() {
+            function calculateIngredientPositions() {
+                // ingredient 텍스트 요소들 가져오기
+                const ingredient1 = document.querySelector('.text-ingredient-1');
+                const ingredient2 = document.querySelector('.text-ingredient-2');
+                const ingredient3 = document.querySelector('.text-ingredient-3');
+                const ingredient4 = document.querySelector('.text-ingredient-4');
+                
+                if (!ingredient1 || !ingredient2 || !ingredient3 || !ingredient4) return;
+                
+                // 임시 요소를 만들어서 각 텍스트의 너비 측정
+                const tempDiv = document.createElement('div');
+                tempDiv.style.position = 'absolute';
+                tempDiv.style.visibility = 'hidden';
+                tempDiv.style.whiteSpace = 'nowrap';
+                tempDiv.style.fontFamily = "'Inter', sans-serif";
+                tempDiv.style.fontWeight = '400';
+                tempDiv.style.fontSize = '20px';
+                tempDiv.style.lineHeight = '1.5';
+                tempDiv.style.letterSpacing = '0';
+                document.body.appendChild(tempDiv);
+                
+                // 각 텍스트의 너비 측정 (1440px 기준)
+                const getTextWidth = (text) => {
+                    tempDiv.textContent = text;
+                    const width = tempDiv.offsetWidth;
+                    return width;
+                };
+                
+                const text1 = ingredient1.textContent.trim();
+                const text2 = ingredient2.textContent.trim();
+                const text3 = ingredient3.textContent.trim();
+                const text4 = ingredient4.textContent.trim();
+                
+                const a = getTextWidth(text1);
+                const b = getTextWidth(text2);
+                const c = getTextWidth(text3);
+                const d = getTextWidth(text4);
+                
+                // 임시 요소 제거
+                document.body.removeChild(tempDiv);
+                
+                // 간격 계산: l = {1440 - 190*2 - (a+b+c+d)} / 3
+                const l = (1440 - 190 * 2 - (a + b + c + d)) / 3;
+                
+                // 각 텍스트의 x 위치 계산
+                const x1 = 190;
+                const x2 = 190 + a + l;
+                const x3 = 190 + a + l + b + l;
+                const x4 = 1440 - 190 - d;
+                
+                // 스타일 업데이트
+                const updatePosition = (element, x) => {
+                    const currentStyle = element.getAttribute('style') || '';
+                    const newStyle = currentStyle.replace(
+                        /left:\s*calc\([\d.]+\s*\/\s*1440\s*\*\s*var\(--container-width\)\)/,
+                        `left: calc(${x} / 1440 * var(--container-width))`
+                    );
+                    element.setAttribute('style', newStyle);
+                };
+                
+                updatePosition(ingredient1, x1);
+                updatePosition(ingredient2, x2);
+                updatePosition(ingredient3, x3);
+                updatePosition(ingredient4, x4);
+            }
+            
+            // 페이지 로드 후 실행
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    setTimeout(calculateIngredientPositions, 100);
+                });
+            } else {
+                setTimeout(calculateIngredientPositions, 100);
+            }
+            
+            // 창 크기 변경 시에도 재계산 (반응형 대응)
+            window.addEventListener('resize', function() {
+                setTimeout(calculateIngredientPositions, 100);
+            });
+        })();
+    </script>
+    <!-- 커스텀 커서 스크립트 -->
+    <!-- 커스텀 모달 스크립트 -->
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <!-- 로고 클릭 시 초기 화면으로 돌아가기 -->
+    <script src="{{ url_for('static', filename='js/intro-common.js') }}"></script>
+    <!-- Product Toggle 스크립트 -->
+    <script src="{{ url_for('static', filename='js/product-toggle.js') }}"></script>
+    <!-- Navigation 버튼 클릭 이벤트 -->
+    <script>
+        (function() {
+            // Home 버튼 클릭 시 home 페이지로 이동
+            const homeButton = document.getElementById('home-button');
+            if (homeButton) {
+                homeButton.addEventListener('click', function() {
+                    window.location.href = "{{ url_for('home') }}";
+                });
+            }
+            
+            // Shop 버튼 클릭 시 shop 페이지로 이동
+            const shopButton = document.getElementById('shop-button');
+            if (shopButton) {
+                shopButton.addEventListener('click', function() {
+                    window.location.href = "{{ url_for('shop') }}";
+                });
+            }
+            
+            // Cart 버튼 클릭 시 cart 페이지로 이동
+            const cartButton = document.getElementById('cart-button');
+            if (cartButton) {
+                cartButton.addEventListener('click', function() {
+                    window.location.href = "{{ url_for('cart') }}";
+                });
+            }
+            
+            // Arrow 버튼 클릭 시 shop 페이지로 이동
+            const arrowButton = document.querySelector('.arrow-button');
+            if (arrowButton) {
+                arrowButton.addEventListener('click', function() {
+                    window.location.href = "{{ url_for('shop') }}";
+                });
+            }
+        })();
+    </script>
+    <!-- Count Number 관리 -->
+    <script>
+        (function() {
+            // current_number 변수 초기화 (기본값 1) - 페이지 로드 시마다 항상 1로 초기화
+            let current_number = 1;
+            
+            // Count Text Middle 요소 가져오기
+            const countTextMiddle = document.getElementById('count-text-middle');
+            const countTextLeft = document.getElementById('count-text-left');
+            
+            // 숫자 업데이트 함수
+            function updateCountDisplay() {
+                if (countTextMiddle) {
+                    countTextMiddle.textContent = current_number;
+                }
+                
+                // count_text_left 색상 업데이트
+                if (countTextLeft) {
+                    if (current_number === 1) {
+                        countTextLeft.style.color = '#7F7F7F';
+                    } else {
+                        countTextLeft.style.color = '#202125';
+                    }
+                }
+            }
+            
+            // 페이지 로드 시 항상 1로 초기화
+            function initializeCount() {
+                current_number = 1;
+                updateCountDisplay();
+            }
+            
+            // DOMContentLoaded 이벤트로 초기화 보장
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeCount);
+            } else {
+                initializeCount();
+            }
+            
+            // Count Button Right 클릭 이벤트
+            const countButtonRight = document.querySelector('.count-button-right');
+            const countTextRight = document.querySelector('.count-text-right');
+            
+            function handleCountRightClick() {
+                current_number += 1;
+                updateCountDisplay();
+            }
+            
+            if (countButtonRight) {
+                countButtonRight.addEventListener('click', handleCountRightClick);
+            }
+            if (countTextRight) {
+                countTextRight.addEventListener('click', handleCountRightClick);
+            }
+            
+            // Count Button Left 클릭 이벤트
+            const countButtonLeft = document.querySelector('.count-button-left');
+            const countTextLeftElement = document.querySelector('.count-text-left');
+            
+            function handleCountLeftClick() {
+                if (current_number > 1) {
+                    current_number -= 1;
+                    updateCountDisplay();
+                }
+            }
+            
+            if (countButtonLeft) {
+                countButtonLeft.addEventListener('click', handleCountLeftClick);
+            }
+            if (countTextLeftElement) {
+                countTextLeftElement.addEventListener('click', handleCountLeftClick);
+            }
+            
+            // Cart Add Button 클릭 이벤트
+            const cartAddButton = document.querySelector('.cart-add-button');
+            const productId = '{{ product.id }}';
+            
+            if (cartAddButton) {
+                cartAddButton.addEventListener('click', async function() {
+                    try {
+                        const response = await fetch('/api/add-to-cart', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                product_id: productId,
+                                count: current_number
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (response.ok && data.success) {
+                            // 성공 메시지 - 커스텀 모달로 변경
+                            await window.customModal(
+                                '알림',
+                                '상품이 담겼습니다!',
+                                '장바구니로',
+                                function() {
+                                    window.location.href = "{{ url_for('cart') }}";
+                                    return true;
+                                },
+                                '상점으로',
+                                function() {
+                                    window.location.href = "{{ url_for('shop') }}";
+                                }
+                            );
+                        } else {
+                            // 실패 메시지 (이미 장바구니에 있는 경우)
+                            await window.customAlert(data.message || '이미 장바구니에 있는 상품입니다.');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        await window.customAlert('오류가 발생했습니다.');
+                    }
+                });
+            }
+        })();
+    </script>
+    <!-- Count Button Hover 이벤트 -->
+    <script>
+        (function() {
+            // 커서 요소 가져오기
+            const customCursor = document.getElementById('custom-cursor');
+            const cursorHoverPath = document.documentElement.dataset.cursorHover || '{{ url_for("static", filename="images/main/cursor-hover.png") }}';
+            const cursorDefaultPath = document.documentElement.dataset.cursorDefault || '{{ url_for("static", filename="images/main/cursor-default.png") }}';
+            
+            // Count Button Left - 버튼과 텍스트 모두 포함하는 hover 영역
+            const countButtonLeft = document.querySelector('.count-button-left');
+            const countTextLeft = document.querySelector('.count-text-left');
+            const countTextMiddle = document.querySelector('.count-text-middle');
+            
+            if (countButtonLeft) {
+                const img = countButtonLeft.querySelector('img');
+                const normalSrc = "{{ url_for('static', filename='images/product/count-button-left.png') }}";
+                const hoverSrc = "{{ url_for('static', filename='images/product/count-button-left-hover.png') }}";
+                
+                function setHoverState(isHover) {
+                    img.src = isHover ? hoverSrc : normalSrc;
+                    // 커서 상태도 함께 변경
+                    if (customCursor) {
+                        customCursor.style.backgroundImage = isHover ? `url('${cursorHoverPath}')` : `url('${cursorDefaultPath}')`;
+                    }
+                }
+                
+                // 모든 관련 요소에 hover 이벤트 추가
+                [countButtonLeft, countTextLeft, countTextMiddle].forEach(element => {
+                    if (element) {
+                        element.addEventListener('mouseenter', function() {
+                            setHoverState(true);
+                        });
+                        
+                        element.addEventListener('mouseleave', function(e) {
+                            const relatedTarget = e.relatedTarget;
+                            // 마우스가 다른 관련 요소로 이동하는지 확인
+                            const isMovingToRelated = (countButtonLeft?.contains(relatedTarget) || 
+                                                      countTextLeft?.contains(relatedTarget) || 
+                                                      countTextMiddle?.contains(relatedTarget));
+                            if (!isMovingToRelated) {
+                                setHoverState(false);
+                            }
+                        });
+                    }
+                });
+            }
+            
+            // Count Button Right - 버튼과 텍스트 모두 포함하는 hover 영역
+            const countButtonRight = document.querySelector('.count-button-right');
+            const countTextRight = document.querySelector('.count-text-right');
+            
+            if (countButtonRight) {
+                const img = countButtonRight.querySelector('img');
+                const normalSrc = "{{ url_for('static', filename='images/product/count-button-right.png') }}";
+                const hoverSrc = "{{ url_for('static', filename='images/product/count-button-right-hover.png') }}";
+                
+                function setHoverState(isHover) {
+                    img.src = isHover ? hoverSrc : normalSrc;
+                    // 커서 상태도 함께 변경
+                    if (customCursor) {
+                        customCursor.style.backgroundImage = isHover ? `url('${cursorHoverPath}')` : `url('${cursorDefaultPath}')`;
+                    }
+                }
+                
+                // 모든 관련 요소에 hover 이벤트 추가
+                [countButtonRight, countTextRight].forEach(element => {
+                    if (element) {
+                        element.addEventListener('mouseenter', function() {
+                            setHoverState(true);
+                        });
+                        
+                        element.addEventListener('mouseleave', function(e) {
+                            const relatedTarget = e.relatedTarget;
+                            // 마우스가 다른 관련 요소로 이동하는지 확인
+                            const isMovingToRelated = (countButtonRight?.contains(relatedTarget) || 
+                                                      countTextRight?.contains(relatedTarget));
+                            if (!isMovingToRelated) {
+                                setHoverState(false);
+                            }
+                        });
+                    }
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko" 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Artifact - Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main-base.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Geist';
+            src: url('{{ url_for("static", filename="fonts/Geist-SemiBold.ttf") }}') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        .shop-now-button:hover {
+            background-color: #E6FE98 !important;
+        }
+        .shop-now-button:hover span {
+            color: #000000 !important;
+            text-shadow: none;
+        }
+    </style>
+    <script src="{{ url_for('static', filename='js/main-base.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/image-preloader.js') }}"></script>
+</head>
+<body >
+    <div class="main-container" style="height: calc(4412 / 1440 * var(--container-width));">
+        <!-- Marquee -->
+        <div class="w-full flex items-center justify-center relative bg-black" style="height: calc(53 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/marquee.png') }}" alt="Marquee" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Logo -->
+        <!-- 위치: (28, 70), 크기: 99×46 - intro와 동일한 위치 -->
+        <div class="absolute cursor-pointer" style="left: calc(28 / 1440 * var(--container-width)); top: calc(60 / 1440 * var(--container-width)); width: calc(99 / 1440 * var(--container-width)); height: calc(46 / 1440 * var(--container-width)); z-index: 1000;" id="logoLink" data-intro1-url="{{ url_for('intro1') }}">
+            <img src="{{ url_for('static', filename='images/main/logo.png') }}" alt="Logo" class="w-full h-full object-contain" style="display: block;">
+        </div>
+
+        <!-- Navigation -->
+        <nav class="w-full flex items-center justify-between relative bg-black" style="height: calc(56 / 1440 * var(--container-width)); padding: 0 calc(28 / 1440 * var(--container-width));">
+            <!-- Navigation Buttons -->
+            <div class="flex items-center ml-auto" style="gap: calc(8 / 1440 * var(--container-width));">
+                <button id="home-button" class="border-none p-0 bg-transparent" style="height: calc(46 / 1440 * var(--container-width)); width: auto; cursor: default; opacity: 0.5; pointer-events: none;">
+                    <img src="{{ url_for('static', filename='images/main/home-button.png') }}" alt="Home" class="h-full w-auto object-contain" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                </button>
+                <button id="shop-button" class="border-none transition-opacity hover:opacity-80 active:opacity-60 p-0 bg-transparent" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                    <img src="{{ url_for('static', filename='images/main/shop-button.png') }}" alt="Shop" class="h-full w-auto object-contain" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                </button>
+                <button id="cart-button" class="border-none transition-opacity hover:opacity-80 active:opacity-60 p-0 bg-transparent relative" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                    <img src="{{ url_for('static', filename='images/main/cart-button.png') }}" alt="Cart" class="h-full w-auto object-contain" style="height: calc(46 / 1440 * var(--container-width)); width: auto;">
+                    <!-- Cart Badge -->
+                    <div class="absolute flex items-center justify-center rounded-full text-white" style="bottom: calc(33 / 1440 * var(--container-width)); left: calc(100% - 13 / 1440 * var(--container-width)); width: calc(20 / 1440 * var(--container-width)); height: calc(20 / 1440 * var(--container-width)); background-color: #FF3A3A; font-family: 'Geist', sans-serif; font-size: calc(12 / 1440 * var(--container-width)); font-weight: 600; line-height: 1.4; letter-spacing: calc(-0.02 * 12 / 1440 * var(--container-width));">
+                        {{ cart_count }}
+                    </div>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Header -->
+        <div class="absolute" style="left: calc(10 / 1440 * var(--container-width)); top: calc(186 / 1440 * var(--container-width)); width: calc(1403 / 1440 * var(--container-width)); height: calc(106 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/header.png') }}" alt="Header" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Shop Illustration -->
+        <div class="absolute" style="left: calc(396 / 1440 * var(--container-width)); top: calc(330 / 1440 * var(--container-width)); width: calc(651 / 1440 * var(--container-width)); height: calc(730 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/shop-illustration.png') }}" alt="Shop Illustration" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Main Title -->
+        <div class="absolute" style="left: calc(439 / 1440 * var(--container-width)); top: calc(953 / 1440 * var(--container-width)); width: calc(562 / 1440 * var(--container-width)); height: calc(569 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/main-title.png') }}" alt="Main Title" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Sub Text - English -->
+        <div class="absolute text-white text-center flex items-center justify-center" style="left: calc(250 / 1440 * var(--container-width)); top: calc(1450 / 1440 * var(--container-width)); width: calc(940 / 1440 * var(--container-width)); height: calc(130 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 500; font-size: calc(18 / 1440 * var(--container-width)); line-height: 1.45; letter-spacing: calc(-0.5 / 100 * 18 / 1440 * var(--container-width)); opacity: 0.55;">
+            <p style="margin: 0;">Memories you wish to forget, painful and unwanted, become Dream Tokens.<br>With Dream Tokens, you can purchase the unusual and imaginative Dream Artifacts displayed in this shop.<br>These items can only be used within dreams, and they help transform negative memories<br>into new dream experiences.</p>
+        </div>
+        
+        <!-- Sub Text - Korean -->
+        <div class="absolute text-white text-center flex items-center justify-center" style="left: calc(250 / 1440 * var(--container-width)); top: calc(1596 / 1440 * var(--container-width)); width: calc(940 / 1440 * var(--container-width)); height: calc(78 / 1440 * var(--container-width)); font-family: 'Inter', sans-serif; font-weight: 500; font-size: calc(18 / 1440 * var(--container-width)); line-height: 1.45; letter-spacing: calc(-0.5 / 100 * 18 / 1440 * var(--container-width)); opacity: 0.55;">
+            <p style="margin: 0;">잊고 싶고, 고통스럽고, 원치 않는 기억들은 매력적인 드림 토큰이 됩니다.<br>당신은 드림 토큰으로 이 상점에서 진열된 이색적이고 상상력이 가득한 드림 아티팩트를 구매할 수 있습니다.<br>이 물건들은 오직 꿈속에서만 사용되며, 부정적인 기억을 새로운 꿈의 경험으로 바꾸는 역할을 합니다.</p>
+        </div>
+        
+        <!-- Large Button 1 -->
+        <div class="absolute left-0 cursor-pointer group" style="top: calc(1785 / 1440 * var(--container-width)); width: calc(1440 / 1440 * var(--container-width)); height: calc(172 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/large-button-1.png') }}" alt="Large Button 1" class="w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-200 absolute inset-0" >
+            <img src="{{ url_for('static', filename='images/main/large-button-1-hover.png') }}" alt="Large Button 1 Hover" class="w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute inset-0" >
+        </div>
+        
+        <!-- Large Button 2 -->
+        <div class="absolute left-0 cursor-pointer group" style="top: calc(1967 / 1440 * var(--container-width)); width: calc(1440 / 1440 * var(--container-width)); height: calc(172 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/large-button-2.png') }}" alt="Large Button 2" class="w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-200 absolute inset-0" >
+            <img src="{{ url_for('static', filename='images/main/large-button-2-hover.png') }}" alt="Large Button 2 Hover" class="w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute inset-0" >
+        </div>
+        
+        <!-- Large Button 3 -->
+        <div class="absolute left-0 cursor-pointer group" style="top: calc(2149 / 1440 * var(--container-width)); width: calc(1440 / 1440 * var(--container-width)); height: calc(172 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/large-button-3.png') }}" alt="Large Button 3" class="w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-200 absolute inset-0" >
+            <img src="{{ url_for('static', filename='images/main/large-button-3-hover.png') }}" alt="Large Button 3 Hover" class="w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute inset-0" >
+        </div>
+        
+        <!-- Cart Illustration -->
+        <div class="absolute" style="left: calc(495 / 1440 * var(--container-width)); top: calc(2367 / 1440 * var(--container-width)); width: calc(493.02 / 1440 * var(--container-width)); height: calc(540.63 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/cart-illustration.png') }}" alt="Cart Illustration" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Shop Now Button -->
+        <a href="{{ url_for('shop') }}" class="shop-now-button absolute flex items-center justify-center cursor-pointer transition-colors duration-200 no-underline" style="left: calc(593 / 1440 * var(--container-width)); top: calc(2908 / 1440 * var(--container-width)); width: calc(238 / 1440 * var(--container-width)); height: calc(52 / 1440 * var(--container-width)); background-color: #FFAAFF;">
+            <span class="text-white font-semibold text-center" style="font-family: 'Geist', sans-serif; font-size: calc(24 / 1440 * var(--container-width)); line-height: 1.4; letter-spacing: calc(-0.02 * 24 / 1440 * var(--container-width)); color: #FFFFFF; text-shadow: 0 calc(4 / 1440 * var(--container-width)) calc(4 / 1440 * var(--container-width)) rgba(0, 0, 0, 0.25);">SHOP NOW</span>
+        </a>
+        
+        <!-- Objects -->
+        <div class="absolute left-0" style="top: calc(3086 / 1440 * var(--container-width)); width: calc(1440 / 1440 * var(--container-width)); height: calc(390 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/objects.png') }}" alt="Objects" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- About Text -->
+        <div class="absolute" style="left: calc(80 / 1440 * var(--container-width)); top: calc(3476 / 1440 * var(--container-width)); width: calc(1280 / 1440 * var(--container-width)); height: calc(380 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/about-text.png') }}" alt="About Text" class="w-full h-full object-contain">
+        </div>
+        
+        <!-- Footer -->
+        <div class="absolute left-0 w-full" style="bottom: calc(47 / 1440 * var(--container-width));">
+            <img src="{{ url_for('static', filename='images/main/footer.png') }}" alt="Footer" class="w-full h-auto">
+        </div>
+    </div>
+    <!-- 커스텀 커서 스크립트 -->
+    <!-- Navigation 버튼 클릭 이벤트 -->
+    <script>
+        (function() {
+            // Shop 버튼 클릭 시 shop 페이지로 이동
+            const shopButton = document.getElementById('shop-button');
+            if (shopButton) {
+                shopButton.addEventListener('click', function() {
+                    window.location.href = "{{ url_for('shop') }}";
+                });
+            }
+            
+            // Cart 버튼 클릭 시 cart 페이지로 이동
+            const cartButton = document.getElementById('cart-button');
+            if (cartButton) {
+                cartButton.addEventListener('click', function() {
+                    window.location.href = "{{ url_for('cart') }}";
+                });
+            }
+        })();
+    </script>
+    <!-- 커스텀 모달 스크립트 -->
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <!-- 로고 클릭 시 초기 화면으로 돌아가기 -->
+    <script src="{{ url_for('static', filename='js/intro-common.js') }}"></script>
+</body>
+</html>

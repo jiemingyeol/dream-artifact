@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko" 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Artifact - Intro 8</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/intro-base.css') }}">
+    <style>
+        @font-face {
+            font-family: 'Geist';
+            src: url('{{ url_for("static", filename="fonts/Geist-SemiBold.ttf") }}') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('{{ url_for("static", filename="fonts/Geist-Medium.ttf") }}') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('{{ url_for("static", filename="fonts/Geist-Regular.ttf") }}') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        /* Next 버튼 폼 스타일: 버튼이 전체 영역을 차지하도록 */
+        #confirmForm button {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <script src="{{ url_for('static', filename='js/image-preloader.js') }}"></script>
+</head>
+<body class="overflow-hidden h-screen w-screen flex items-center justify-center" >
+    <div class="bg-desktop relative overflow-hidden" data-name="Desktop" data-node-id="1:8230">
+        <!-- Marquee -->
+        <div class="absolute top-0 left-0 w-full h-[7.41vh] flex items-center justify-center" data-name="Marquee" data-node-id="1:8231">
+            <img src="{{ url_for('static', filename='images/intro/marquee.png') }}" alt="Marquee" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Logo -->
+        <!-- 위치: (28, 60), 크기: 99×46 -->
+        <div class="absolute left-[1.94%] top-[7.41vh] w-[6.88%] h-[5.68vh] cursor-pointer" id="logoLink" data-intro1-url="{{ url_for('intro1') }}" data-name="로고 2" data-node-id="I1:8233;1:8388">
+            <img src="{{ url_for('static', filename='images/intro/logo.png') }}" alt="Logo" class="w-full h-full object-cover max-w-none pointer-events-none">
+        </div>
+
+        <!-- Main Text -->
+        <!-- Figma: 1440x810 프레임 기준, 위치 x=90 y=374 -->
+        <div class="absolute font-semibold h-[13.46vh] leading-[1.7] left-[6.25%] text-[1.67vw] text-white top-[46.17%] w-[55.49%]" style="font-family: 'Geist', sans-serif;" data-node-id="1:8311">
+            한 번 입력 완료한 기억은 수정하거나 삭제할 수 없습니다.<br>이대로 진행하시겠습니까?
+        </div>
+
+        <!-- Hourglass Illustration -->
+        <!-- Figma: 1440x810 프레임 기준, 위치 top=3.70vh right=8.13% bottom=-2.84vh, 비율 1024:1536, 회전 12도 -->
+        <div class="absolute aspect-[1024/1536] bottom-[-2.84vh] right-[8.13%] top-[3.70vh] overflow-hidden" data-name="모래시계" data-node-id="1:8313" style="transform: rotate(12deg);">
+            <img src="{{ url_for('static', filename='images/intro/hourglass-illustration.png') }}" alt="Hourglass" class="absolute inset-0 w-full h-full object-cover max-w-none pointer-events-none">
+        </div>
+
+        <!-- Back Button -->
+        <!-- Figma: 1440x810 프레임 기준, 크기 126×47px, 위치 bottom=4.81vh right=8.0% -->
+        <!-- 크기 변환: width = 126/1440 * 100% = 8.75%, height = 47/810 * 100vh = 5.80vh -->
+        <a href="{{ url_for('intro5') }}" class="absolute bottom-[4.81vh] right-[8.0%] w-[8.75%] h-[5.80vh] cursor-pointer transition-opacity hover:opacity-90 no-underline block">
+            <img src="{{ url_for('static', filename='images/intro/back-button.png') }}" alt="Back" class="block max-w-none w-full h-full object-contain pointer-events-none">
+        </a>
+
+        <!-- Next Button -->
+        <!-- Figma: 1440x810 프레임 기준, 크기 3.33%x5.93vh, 위치 bottom=4.81vh right=3.40% -->
+        <form id="confirmForm" action="{{ url_for('intro8_submit') }}" method="POST" class="absolute bottom-[4.81vh] right-[3.40%] w-[3.33%] h-[5.93vh] cursor-pointer transition-opacity hover:opacity-90 no-underline block" data-node-id="12:1217">
+            <input type="hidden" name="customer_id" value="{{ customer_id }}">
+            <button type="submit" class="w-full h-full p-0 border-none bg-transparent cursor-pointer">
+                <img src="{{ url_for('static', filename='images/intro/next-button.png') }}" alt="Next" class="block max-w-none w-full h-full pointer-events-none">
+            </button>
+        </form>
+    </div>
+    <!-- 커스텀 커서 스크립트 -->
+    <!-- 로고 클릭 시 초기 화면으로 돌아가기 -->
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/intro-common.js') }}"></script>
+    <script>
+        (function() {
+            const confirmForm = document.getElementById('confirmForm');
+            
+            if (confirmForm) {
+                confirmForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    // 커스텀 모달 표시
+                    await customModal(
+                        '알림',
+                        '이대로 진행하시겠습니까?\n한 번 입력 완료한 기억은 수정하거나 삭제할 수 없습니다.',
+                        '확인',
+                        function(modalElement, overlayElement) {
+                            // 모달 내부에 로딩 아이콘 표시
+                            showLoadingInModal(modalElement);
+                            // 모달을 닫지 않도록 false 반환
+                            return false;
+                        },
+                        '취소',
+                        function() {
+                            // 취소 버튼 클릭 시 아무 동작 없음
+                        }
+                    );
+                });
+            }
+            
+            function showLoadingInModal(modalElement) {
+                // 모달 내부의 모든 내용 제거
+                while (modalElement.firstChild) {
+                    modalElement.removeChild(modalElement.firstChild);
+                }
+                
+                // 모달 스타일 변경 (중앙 정렬)
+                modalElement.style.display = 'flex';
+                modalElement.style.alignItems = 'center';
+                modalElement.style.justifyContent = 'center';
+                modalElement.style.padding = '0';
+                
+                // 로딩 아이콘 생성 (모달 중앙에 배치)
+                const loadingIcon = document.createElement('div');
+                loadingIcon.id = 'intro8-loading-icon-modal';
+                loadingIcon.style.cssText = 'width: calc(94 / 1440 * 100vw); height: calc(94 / 1440 * 100vw); border-radius: 50%; background: conic-gradient(from 0deg, #FFAAFF 0deg 72deg, #D9D9D9 72deg 360deg); mask-image: radial-gradient(circle, transparent calc(50% - 5.25px), black calc(50% - 5.25px)); -webkit-mask-image: radial-gradient(circle, transparent calc(50% - 5.25px), black calc(50% - 5.25px)); animation: spin 1s linear infinite;';
+                
+                // spin 애니메이션 스타일 추가 (아직 없으면)
+                if (!document.getElementById('loading-spin-style')) {
+                    const style = document.createElement('style');
+                    style.id = 'loading-spin-style';
+                    style.textContent = '@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }';
+                    document.head.appendChild(style);
+                }
+                
+                modalElement.appendChild(loadingIcon);
+                
+                // 스크롤 방지를 위해 body에 클래스 추가
+                document.body.classList.add('loading-active');
+                
+                // 스크롤 이벤트 방지
+                function preventScroll(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+                window.addEventListener('wheel', preventScroll, { passive: false });
+                window.addEventListener('touchmove', preventScroll, { passive: false });
+                window.addEventListener('scroll', preventScroll, { passive: false });
+                
+                // 3초 후 intro9로 이동
+                setTimeout(function() {
+                    // 이벤트 리스너 제거
+                    window.removeEventListener('wheel', preventScroll);
+                    window.removeEventListener('touchmove', preventScroll);
+                    window.removeEventListener('scroll', preventScroll);
+                    document.body.classList.remove('loading-active');
+                    // 폼 제출
+                    confirmForm.submit();
+                }, 3000);
+            }
+        })();
+    </script>
+    <style>
+        /* 로딩 중 스크롤 방지 */
+        body.loading-active {
+            overflow: hidden !important;
+            position: fixed !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+    </style>
+</body>
+</html>

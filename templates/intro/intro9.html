@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Artifact - Intro 9</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/intro-base.css') }}">
+    <style>
+        @font-face {
+            font-family: 'Geist';
+            src: url('{{ url_for("static", filename="fonts/Geist-SemiBold.ttf") }}') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+    </style>
+    <script src="{{ url_for('static', filename='js/image-preloader.js') }}"></script>
+</head>
+<body class="overflow-hidden h-screen w-screen flex items-center justify-center" >
+    <div class="bg-desktop relative overflow-hidden" data-name="Desktop" data-node-id="1:8230">
+        <!-- Marquee -->
+        <div class="absolute top-0 left-0 w-full h-[7.41vh] flex items-center justify-center" data-name="Marquee" data-node-id="1:8231">
+            <img src="{{ url_for('static', filename='images/intro/marquee.png') }}" alt="Marquee" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Logo -->
+        <!-- 위치: (28, 60), 크기: 99×46 -->
+        <div class="absolute left-[1.94%] top-[7.41vh] w-[6.88%] h-[5.68vh] cursor-pointer" id="logoLink" data-intro1-url="{{ url_for('intro1') }}" data-name="로고 2" data-node-id="I1:8233;1:8388">
+            <img src="{{ url_for('static', filename='images/intro/logo.png') }}" alt="Logo" class="w-full h-full object-cover max-w-none pointer-events-none">
+        </div>
+
+        <!-- Main Text -->
+        <!-- Figma: 1440x810 프레임 기준, 위치 x=90 y=379 -->
+        <div class="absolute font-semibold leading-[1.7] left-[6.25%] text-[1.67vw] text-white top-[46.79%] w-[42.5%]" style="font-family: 'Geist', sans-serif; font-weight: 600;">
+            <p class="mb-0">{% if customer_name %}{{ customer_name }}{% else %}당신{% endif %}님의 기억이 {{ customer_token }} 드림 토큰으로 교환되었습니다.</p>
+        </div>
+
+        <!-- Token Illustration -->
+        <!-- Figma: 1440x810 프레임 기준, 크기 765x510, 위치 x=675 y=165 -->
+        <div class="absolute aspect-[3/2] left-[46.875%] top-[20.37%] w-[53.125%] overflow-hidden" data-name="토큰 일러스트 2" data-node-id="1:8301">
+            <img src="{{ url_for('static', filename='images/intro/token-illustration-2.png') }}" alt="Token Illustration" class="absolute inset-0 w-full h-full object-cover max-w-none pointer-events-none" style="min-width: 100%; min-height: 100%;">
+        </div>
+
+        <!-- Next Button -->
+        <a href="{{ url_for('intro10') }}" class="absolute bottom-[4.81vh] right-[3.40%] w-[3.33%] h-[5.93vh] cursor-pointer transition-opacity hover:opacity-90 no-underline block" data-node-id="12:1212">
+            <img src="{{ url_for('static', filename='images/intro/next-button.png') }}" alt="Next" class="block max-w-none w-full h-full pointer-events-none">
+        </a>
+    </div>
+    <!-- 커스텀 커서 스크립트 -->
+    <!-- 로고 클릭 시 초기 화면으로 돌아가기 -->
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/intro-common.js') }}"></script>
+</body>
+</html>

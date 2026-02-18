@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko" 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Artifact - Intro 6</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/intro-base.css') }}">
+    <style>
+        @font-face {
+            font-family: 'Geist';
+            src: url('{{ url_for("static", filename="fonts/Geist-SemiBold.ttf") }}') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('{{ url_for("static", filename="fonts/Geist-Medium.ttf") }}') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('{{ url_for("static", filename="fonts/Geist-Regular.ttf") }}') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        /* Next 버튼 폼 스타일: 버튼이 전체 영역을 차지하도록 */
+        #memoryForm button {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        /* Skip 버튼 폼 스타일: 버튼이 전체 영역을 차지하도록 */
+        #skipForm button {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <script src="{{ url_for('static', filename='js/image-preloader.js') }}"></script>
+</head>
+<body class="overflow-hidden h-screen w-screen flex items-center justify-center" >
+    <div class="bg-desktop relative overflow-hidden" data-name="Desktop" data-node-id="1:8230">
+        <!-- Marquee -->
+        <div class="absolute top-0 left-0 w-full h-[7.41vh] flex items-center justify-center" data-name="Marquee" data-node-id="1:8231">
+            <img src="{{ url_for('static', filename='images/intro/marquee.png') }}" alt="Marquee" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Logo -->
+        <!-- 위치: (28, 60), 크기: 99×46 -->
+        <div class="absolute left-[1.94%] top-[7.41vh] w-[6.88%] h-[5.68vh] cursor-pointer" id="logoLink" data-intro1-url="{{ url_for('intro1') }}" data-name="로고 2" data-node-id="I1:8233;1:8388">
+            <img src="{{ url_for('static', filename='images/intro/logo.png') }}" alt="Logo" class="w-full h-full object-cover max-w-none pointer-events-none">
+        </div>
+
+        <!-- Main Text -->
+        <!-- Figma: 1440x810 프레임 기준, 크기 55.49%x40.74vh, 위치 left=6.25% top=calc(50%-19.63vh) -->
+        <div class="absolute font-semibold h-[40.74vh] leading-[1.7] left-[6.25%] text-[1.67vw] text-white top-[calc(50%-19.63vh)] w-[55.49%]" style="font-family: 'Geist', sans-serif;" data-node-id="1:8323">
+            <p class="mb-0">교환하고 싶은 {% if customer_name %}<span id="customerName">{{ customer_name }}</span>님의{% else %}당신의{% endif %} 기억을 적어주세요.<br>더 작성하고 싶지 않으면 우측 하단의 건너뛰기를 눌러주세요.</p>
+        </div>
+
+        <!-- Sub Text -->
+        <!-- Figma: 1440x810 프레임 기준, 위치 left=6.25% top=calc(50%-7.65vh) -->
+        <p class="absolute font-semibold leading-normal left-[6.25%] text-[1.39vw] text-white top-[calc(50%-7.65vh)]" style="font-family: 'Geist', sans-serif;">
+            두 번째 기억
+        </p>
+
+        <!-- Text Input Box -->
+        <!-- Figma: 1440x810 프레임 기준, 크기 55.49%x34.44vh, 위치 left=6.25% top=46.91vh, 최대 200자 입력 가능 -->
+        <div class="absolute left-[6.25%] top-[46.91vh] w-[55.49%] h-[34.44vh]" data-node-id="12:1362">
+            <div class="absolute inset-0 bg-white border-4 border-[#777] rounded-[17px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"></div>
+            <textarea 
+                id="memoryInput" 
+                class="absolute inset-0 bg-transparent border-none outline-none px-[1.53vw] pt-[1.23vh] pb-[3.70vh] text-[1.11vw] text-black rounded-[17px] resize-none"
+                style="font-family: 'Geist', sans-serif; font-weight: 500;"
+            >{% if text2 %}{{ text2 }}{% endif %}</textarea>
+            <label 
+                for="memoryInput" 
+                id="memoryPlaceholder" 
+                class="absolute inset-0 flex items-start px-[1.53vw] pt-[1.23vh] text-[1.11vw] text-[#8b8b8b] pointer-events-none rounded-[17px]"
+                style="font-family: 'Geist', sans-serif; font-weight: 500;"
+            >
+                내용을 입력하세요.
+            </label>
+            <!-- Character Count -->
+            <div id="charCount" class="absolute bottom-[1.23vh] right-[1.53vw] text-[1.11vw] text-black" style="font-family: 'Geist', sans-serif; font-weight: 400;" data-node-id="31:3109">
+                (<span id="currentCount">000</span> / 200)
+            </div>
+        </div>
+
+        <!-- Pencil Illustration -->
+        <!-- Figma: 1440x810 프레임 기준, 크기 27.29%x72.72vh, 위치 bottom=4.81vh right=3.13% -->
+        <div class="absolute bottom-[4.81vh] h-[72.72vh] right-[3.13%] w-[27.29%] overflow-hidden" data-name="연필 모양 1" data-node-id="1:8330">
+            <img src="{{ url_for('static', filename='images/intro/pencil-illustration.png') }}" alt="Pencil" class="absolute inset-0 w-full h-full object-cover max-w-none pointer-events-none">
+        </div>
+
+        <!-- Skip Button -->
+        <!-- Figma: 1440x810 프레임 기준, 크기 126×47px, 위치 bottom=4.81vh right=8.0% -->
+        <!-- 크기 변환: width = 126/1440 * 100% = 8.75%, height = 47/810 * 100vh = 5.80vh -->
+        <form id="skipForm" action="{{ url_for('intro6_skip') }}" method="POST" class="absolute bottom-[4.81vh] right-[8.0%] w-[8.75%] h-[5.80vh] cursor-pointer transition-opacity hover:opacity-90 no-underline block">
+            <input type="hidden" name="customer_id" value="{{ customer_id }}">
+            <button type="submit" class="w-full h-full p-0 border-none bg-transparent cursor-pointer">
+                <img src="{{ url_for('static', filename='images/intro/skip-button.png') }}" alt="Skip" class="block max-w-none w-full h-full object-contain pointer-events-none">
+            </button>
+        </form>
+
+        <!-- Next Button -->
+        <!-- Figma: 1440x810 프레임 기준, 크기 3.33%x5.93vh, 위치 bottom=4.81vh right=3.40% -->
+        <form id="memoryForm" action="{{ url_for('intro6_submit') }}" method="POST" class="absolute bottom-[4.81vh] right-[3.40%] w-[3.33%] h-[5.93vh] cursor-pointer transition-opacity hover:opacity-90 no-underline block" data-node-id="12:1222">
+            <input type="hidden" id="text2Value" name="text2" value="">
+            <input type="hidden" name="customer_id" value="{{ customer_id }}">
+            <button type="submit" class="w-full h-full p-0 border-none bg-transparent cursor-pointer">
+                <img src="{{ url_for('static', filename='images/intro/next-button.png') }}" alt="Next" class="block max-w-none w-full h-full pointer-events-none">
+            </button>
+        </form>
+    </div>
+    <!-- 커스텀 커서 스크립트 -->
+    <!-- 로고 클릭 시 초기 화면으로 돌아가기 -->
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/intro-common.js') }}"></script>
+    <!-- 메모리 입력 필드 스크립트 -->
+    <script>
+        (function() {
+            const memoryInput = document.getElementById('memoryInput');
+            const memoryPlaceholder = document.getElementById('memoryPlaceholder');
+            
+            const charCount = document.getElementById('charCount');
+            const currentCount = document.getElementById('currentCount');
+            
+            // 공백 포함 글자수 계산 함수
+            function calcCharCount(text) {
+                return text.length; // 공백 포함 전체 길이
+            }
+            
+            // 글자수를 세 자리 숫자로 포맷팅
+            function formatCharCount(count) {
+                return String(count).padStart(3, '0');
+            }
+            
+            // 글자수 업데이트 함수
+            function updateCharCount() {
+                const text = memoryInput.value;
+                const count = calcCharCount(text);
+                currentCount.textContent = formatCharCount(count);
+            }
+            
+            // 200자 제한 함수
+            function enforceMaxLength(text, maxLength) {
+                const count = calcCharCount(text);
+                if (count > maxLength) {
+                    // 200자까지만 유지
+                    return text.substring(0, maxLength);
+                }
+                return text;
+            }
+            
+            // 입력 가능 여부 확인 함수
+            function canInput(text, maxLength) {
+                const count = calcCharCount(text);
+                return count < maxLength;
+            }
+            
+            // 포커스 시 플레이스홀더 숨기기
+            memoryInput.addEventListener('focus', function() {
+                memoryPlaceholder.style.display = 'none';
+            });
+            
+            // 포커스 아웃 시 값이 없으면 플레이스홀더 표시
+            memoryInput.addEventListener('blur', function() {
+                if (memoryInput.value.trim() === '') {
+                    memoryPlaceholder.style.display = 'flex';
+                }
+            });
+            
+            // 입력 시 플레이스홀더 숨기기 및 글자수 계산 및 제한
+            memoryInput.addEventListener('input', function(e) {
+                let text = memoryInput.value;
+                const maxLength = 200;
+                
+                // 200자 제한 적용
+                if (!canInput(text, maxLength)) {
+                    text = enforceMaxLength(text, maxLength);
+                    memoryInput.value = text;
+                }
+                
+                // 플레이스홀더 숨기기
+                if (text.trim() !== '') {
+                    memoryPlaceholder.style.display = 'none';
+                }
+                
+                // 공백 포함 글자수 실시간 계산 및 표시
+                updateCharCount();
+            });
+            
+            // 붙여넣기 시에도 200자 제한 적용
+            memoryInput.addEventListener('paste', function(e) {
+                e.preventDefault();
+                const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+                const currentValue = memoryInput.value;
+                const maxLength = 200;
+                
+                // 현재 글자수 확인
+                const currentCount = calcCharCount(currentValue);
+                const remaining = maxLength - currentCount;
+                
+                if (remaining > 0) {
+                    // 붙여넣을 수 있는 만큼만 추가
+                    const textToAdd = pastedText.substring(0, remaining);
+                    memoryInput.value = currentValue + textToAdd;
+                }
+                
+                // 200자 제한 재확인
+                memoryInput.value = enforceMaxLength(memoryInput.value, maxLength);
+                
+                // 플레이스홀더 숨기기
+                if (memoryInput.value.trim() !== '') {
+                    memoryPlaceholder.style.display = 'none';
+                }
+                
+                // 글자수 업데이트
+                updateCharCount();
+            });
+            
+            // 초기 글자수 표시
+            updateCharCount();
+            
+            // 기존 값이 있으면 플레이스홀더 숨기기
+            if (memoryInput.value.trim() !== '') {
+                memoryPlaceholder.style.display = 'none';
+            }
+            
+            // Next 버튼 클릭 시 텍스트를 form에 전달
+            const memoryForm = document.getElementById('memoryForm');
+            const text2Value = document.getElementById('text2Value');
+            
+            memoryForm.addEventListener('submit', async function(e) {
+                const text = memoryInput.value.trim();
+                
+                // 빈 입력 체크
+                if (text === '') {
+                    e.preventDefault();
+                    await customAlert('내용을 입력해 주세요.');
+                    memoryInput.focus();
+                    return false;
+                }
+                
+                // 텍스트를 hidden input에 설정
+                text2Value.value = text;
+            });
+            
+            // Skip 버튼 클릭 시 확인 팝업
+            const skipForm = document.getElementById('skipForm');
+            skipForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const confirmed = await customConfirm('건너뛰시겠습니까?\n현재 페이지에서 입력한 내용은 사라집니다.');
+                if (confirmed) {
+                    skipForm.submit();
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

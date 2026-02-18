@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko" 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Artifact - Intro 10</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/intro-base.css') }}">
+    <style>
+        @font-face {
+            font-family: 'Geist';
+            src: url('{{ url_for("static", filename="fonts/Geist-SemiBold.ttf") }}') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        /* 3, 2, 1 카운트다운: 처음엔 숨김 → 3.2초 후부터 1.2초 간격으로 페이드인 */
+        .intro10-countdown-part {
+            opacity: 0;
+        }
+        .intro10-countdown-3 {
+            animation: intro10-fade-in 0.5s ease-out forwards;
+            animation-delay: 3.2s;
+        }
+        .intro10-countdown-2 {
+            animation: intro10-fade-in 0.5s ease-out forwards;
+            animation-delay: 4.4s;
+        }
+        .intro10-countdown-1 {
+            animation: intro10-fade-in 0.5s ease-out forwards;
+            animation-delay: 5.6s;
+        }
+        @keyframes intro10-fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+    <script src="{{ url_for('static', filename='js/image-preloader.js') }}"></script>
+</head>
+<body class="overflow-hidden h-screen w-screen flex items-center justify-center" >
+    <div class="bg-desktop relative overflow-hidden" data-name="Desktop" data-node-id="1:8230">
+        <!-- Marquee -->
+        <div class="absolute top-0 left-0 w-full h-[7.41vh] flex items-center justify-center" data-name="Marquee" data-node-id="1:8231">
+            <img src="{{ url_for('static', filename='images/intro/marquee.png') }}" alt="Marquee" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Logo -->
+        <!-- 위치: (28, 60), 크기: 99×46 -->
+        <div class="absolute left-[1.94%] top-[7.41vh] w-[6.88%] h-[5.68vh] cursor-pointer" id="logoLink" data-intro1-url="{{ url_for('intro1') }}" data-name="로고 2" data-node-id="I1:8233;1:8388">
+            <img src="{{ url_for('static', filename='images/intro/logo.png') }}" alt="Logo" class="w-full h-full object-cover max-w-none pointer-events-none">
+        </div>
+
+        <!-- Main Text -->
+        <!-- Figma: 1440x810 프레임 기준, 위치 x=90 y=345 -->
+        <div class="absolute font-semibold leading-[1.7] left-[6.25%] text-[1.67vw] text-white top-[42.59%] w-[42.5%]" style="font-family: 'Geist', sans-serif; font-weight: 600;" data-node-id="1:8311">
+            <p class="mb-0">모든 준비가 끝났습니다. 천천히 심호흡하고</p>
+            <p class="mb-0">숫자를 3부터 거꾸로 세어보세요.</p>
+            <p class="mb-0"><span class="intro10-countdown-part intro10-countdown-3">3,</span><span class="intro10-countdown-part intro10-countdown-2"> 2,</span><span class="intro10-countdown-part intro10-countdown-1"> 1</span></p>
+        </div>
+
+        <!-- Watch Illustration -->
+        <!-- Figma: 1440x810 프레임 기준, 위치 top=3.70vh right=8.13% bottom=-2.84vh, 비율 1024:1536, 회전 12도 -->
+        <div class="absolute aspect-[1024/1536] bottom-[-2.84vh] right-[8.13%] top-[3.70vh] overflow-hidden" data-name="시계 일러스트" data-node-id="1:8313" style="transform: rotate(12deg);">
+            <img src="{{ url_for('static', filename='images/intro/watch-illustration.png') }}" alt="Watch Illustration" class="absolute inset-0 w-full h-full object-cover max-w-none pointer-events-none">
+        </div>
+    </div>
+    <!-- 커스텀 커서 스크립트 -->
+    <!-- 로고 클릭 시 초기 화면으로 돌아가기 -->
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/intro-common.js') }}"></script>
+    <!-- 자동 알림 팝업 스크립트 -->
+    <script>
+        (function() {
+            // "1" 페이드인 종료(6.1초) 후 0.9초 대기 → 7.0초에 알림 표시
+            setTimeout(async function() {
+                await customAlert('드림 아티팩트 상점에 접속합니다.');
+                // 확인 버튼을 누르면 home으로 이동
+                window.location.href = "{{ url_for('home') }}";
+            }, 7000);
+        })();
+    </script>
+</body>
+</html>

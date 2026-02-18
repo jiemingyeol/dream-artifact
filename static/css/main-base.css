@@ -1,0 +1,59 @@
+/* 기본 스타일 - 모든 main 페이지에서 공통으로 사용 */
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #000000;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* 클릭 가능한 요소에 호버 효과 추가 */
+button,
+a,
+[role="button"],
+.cursor-pointer,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+[onclick] {
+    cursor: pointer;
+}
+
+/* 입력 필드는 기본 커서 유지 */
+input:not([type="button"]):not([type="submit"]):not([type="reset"]),
+textarea,
+select {
+    cursor: text;
+}
+
+/* 메인 컨테이너: 브라우저 너비에 맞춤, 내부 요소는 1440px 기준 상대 비율 */
+.main-container {
+    width: 100vw;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+    background-color: #000000;
+    /* 스케일 비율 변수: JavaScript에서 동적으로 설정됨 */
+    --scale-ratio: 1;
+    --container-width: 100vw; /* 기본값: 화면 너비 */
+}
+
+/* 스크롤바 스타일링 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333333;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555555;
+}
