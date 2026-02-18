@@ -89,7 +89,9 @@ dream_artifact/
          │  ├─ Marquee.png
          │  ├─ main-title.png
          │  ├─ next-button.png
+         │  ├─ next-button-hover.png
          │  ├─ back-button.png
+         │  ├─ back-button-hover.png
          │  ├─ skip-button.png
          │  ├─ shop-illustration.png
          │  ├─ token-illustration-1.png
@@ -204,6 +206,7 @@ python app.py
   - Logo: 절대 위치 (28, 60), 크기: 99×46px (vh 기반 스케일링)
     - 클릭 시 확인 팝업 표시 후 intro1 페이지로 이동
   - **Next 버튼**: intro-common.js에서 호버 시 `next-button-hover.png`로 이미지 변경 (intro2~9)
+  - **Back 버튼**: intro-common.js에서 호버 시 `back-button-hover.png`로 이미지 변경 (intro8)
   - **Skip 버튼**: intro-common.js에서 호버 시 `skip-button-hover.png`로 이미지 변경 (intro6, intro7)
 - **intro1**: START 버튼 (배경 #ffaaff, 텍스트 흰색) — 호버 시 배경/텍스트 색 교환 (배경 흰색, 텍스트 #ffaaff)
 - **intro2**: "다음 페이지로 가려면 클릭!" 텍스트 (우측 여백 114, 아래 여백 43, Geist Semibold 16pt 기준 반응형 `clamp(10pt, 1.48vw, 20pt)`, 흰색, 우측 정렬), 점멸 효과 (0.8s 주기)
@@ -640,7 +643,7 @@ python app.py
 
 - **공통 파일 분리**: 중복 코드를 제거하고 재사용 가능한 공통 파일로 분리
   - `static/css/intro-base.css`: 모든 intro 페이지의 기본 스타일 및 `.bg-desktop` 컨테이너 스타일 (기본 커서 호버 효과 포함)
-  - `static/js/intro-common.js`: 로고 클릭 이벤트 핸들러, Next/Skip 버튼 호버 시 이미지 변경 (모든 intro 페이지 공통)
+  - `static/js/intro-common.js`: 로고 클릭 이벤트 핸들러, Next/Back/Skip 버튼 호버 시 이미지 변경 (모든 intro 페이지 공통)
   - `static/css/main-base.css`: 모든 main 페이지의 기본 스타일 및 `.main-container` 컨테이너 스타일 (기본 커서 호버 효과 포함)
   - `static/js/main-base.js`: Main 페이지 스케일링 로직 (CSS 변수 설정)
   - `static/js/modal.js`: 커스텀 모달 시스템 (전체화면 모드 유지, 닫기 버튼, 반응형 디자인)
@@ -831,7 +834,7 @@ python app.py
 - 연필 일러스트 (`pencil-illustration.png`)
 - 모래시계 일러스트 (`hourglass-illustration.png`)
 - 시계 일러스트 (`watch-illustration.png`)
-- 버튼 이미지 (`next-button.png`, `next-button-hover.png`, `back-button.png`, `skip-button.png`, `skip-button-hover.png`)
+- 버튼 이미지 (`next-button.png`, `next-button-hover.png`, `back-button.png`, `back-button-hover.png`, `skip-button.png`, `skip-button-hover.png`)
 - Marquee (`marquee.png`)
 
 **Main 페이지** (`static/images/main/`):

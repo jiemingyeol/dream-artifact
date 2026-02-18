@@ -28,6 +28,22 @@
         });
     });
 
+    // Back 버튼 (intro8): 호버 시 back-button-hover 이미지로 변경
+    const backButtonImgs = document.querySelectorAll('img[src*="back-button.png"], img[data-src*="back-button.png"]');
+    backButtonImgs.forEach(function(img) {
+        const parent = img.closest('a') || img.closest('button');
+        if (!parent) return;
+        const defaultSrc = (img.src || img.getAttribute('src') || img.getAttribute('data-src') || '').toString();
+        const hoverSrc = defaultSrc.replace('back-button.png', 'back-button-hover.png');
+        if (!defaultSrc || hoverSrc === defaultSrc) return;
+        parent.addEventListener('mouseenter', function() {
+            img.src = hoverSrc;
+        });
+        parent.addEventListener('mouseleave', function() {
+            img.src = defaultSrc;
+        });
+    });
+
     // Skip 버튼 (intro6, intro7): 호버 시 skip-button-hover 이미지로 변경
     const skipButtonImgs = document.querySelectorAll('img[src*="skip-button.png"], img[data-src*="skip-button.png"]');
     skipButtonImgs.forEach(function(img) {
