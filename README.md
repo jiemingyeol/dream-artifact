@@ -1,6 +1,6 @@
-## Dream Store
+## Dream Artifact
 
-Dream Store는 사용자의 문장을 가상 화폐(토큰)로 교환하고, 그 토큰으로 상징적인 상품을 고르는 실험적인 웹 스토어 프로젝트입니다.
+Dream Artifact는 사용자의 문장을 가상 화폐(토큰)로 교환하고, 그 토큰으로 상징적인 상품을 고르는 실험적인 웹 스토어 프로젝트입니다.
 
 현재 프로젝트는 **기본 기능 구현 완료** 상태입니다. Intro 페이지(소개 및 사용자 입력), 데이터베이스 시스템, Main 페이지(홈, 상점, 장바구니, 영수증), 상품 상세 페이지, 영수증 이미지 생성 기능이 모두 구현되어 있습니다.
 
@@ -9,7 +9,7 @@ Dream Store는 사용자의 문장을 가상 화폐(토큰)로 교환하고, 그
 ## 기술 스택
 
 - **Backend**: Flask (Python)
-- **Database**: SQLite (고객/주문: `dream_store.db`, 상품 구매수: `dream_store_stats.db`)
+- **Database**: SQLite (고객/주문: `dream_artifact.db`, 상품 구매수: `dream_artifact_stats.db`)
 - **Frontend**:
   - HTML 템플릿 + Jinja2
   - Tailwind CSS (CDN)
@@ -27,7 +27,7 @@ Dream Store는 사용자의 문장을 가상 화폐(토큰)로 교환하고, 그
 ## 프로젝트 구조
 
 ```text
-dream_store/
+dream_artifact/
 ├─ app.py                 # Flask 앱 엔트리 포인트
 ├─ database.py            # 데이터베이스 모델 및 함수
 ├─ memory_scoring.py     # 메모리 텍스트 스코어링 함수 (토큰 계산)
@@ -236,11 +236,11 @@ python app.py
 ### 데이터베이스 시스템
 
 - **SQLite 데이터베이스** 2개 사용
-  - **`dream_store.db`**: 고객/주문 데이터
-  - **`dream_store_stats.db`**: 상품별 구매수 통계 (id, name, type, purchase_count, 기본값 0)
+  - **`dream_artifact.db`**: 고객/주문 데이터
+  - **`dream_artifact_stats.db`**: 상품별 구매수 통계 (id, name, type, purchase_count, 기본값 0)
 - **JSON 파일** 사용: 상품 마스터 데이터 (`products.json`, `purchase_count` 제외)
 
-#### 고객 데이터 구조 (dream_store.db)
+#### 고객 데이터 구조 (dream_artifact.db)
 - `id`: 고객 번호 (001, 002, ... 세 자리 텍스트)
 - `name`: 고객 이름
 - `text1`, `text2`, `text3`: 사연 텍스트
@@ -249,7 +249,7 @@ python app.py
 - `price`: 구매 가격
 - `timestamp`: 생성 일시
 
-#### 상품 구매수 통계 (dream_store_stats.db, `product_stats` 테이블)
+#### 상품 구매수 통계 (dream_artifact_stats.db, `product_stats` 테이블)
 - `id`: 상품 번호 (01~30)
 - `name`, `type`: 상품 이름·종류 (products.json과 동기화)
 - `purchase_count`: 누적 구매 개수 (기본 0, 결제 시 증가)
@@ -260,12 +260,12 @@ python app.py
 
 **상품 관리 함수** (`database.py`):
 - `get_products()`: 모든 상품 목록 가져오기 (JSON)
-- `get_product_by_id(product_id)`: 특정 상품 정보 가져오기 (purchase_count는 dream_store_stats.db에서 조회)
-- `get_product_purchase_count(product_id)`: dream_store_stats.db에서 해당 상품의 purchase_count만 조회
+- `get_product_by_id(product_id)`: 특정 상품 정보 가져오기 (purchase_count는 dream_artifact_stats.db에서 조회)
+- `get_product_purchase_count(product_id)`: dream_artifact_stats.db에서 해당 상품의 purchase_count만 조회
 - `add_product(product_data)`, `update_product(product_id, product_data)`, `delete_product(product_id)`: 상품 CRUD 및 stats 동기화
 - `save_products(products)`: 상품 목록을 JSON 파일에 저장
 
-**상품 구매수 함수** (`database.py`, dream_store_stats.db):
+**상품 구매수 함수** (`database.py`, dream_artifact_stats.db):
 - `init_product_stats()`: product_stats 테이블 생성·동기화 (모든 상품 행, purchase_count=0)
 - `get_product_stats()`: 상품별 구매수 목록 조회
 - `add_product_purchase_count(product_id, amount)`: 결제 시 구매수 누적
@@ -390,7 +390,7 @@ python app.py
     - 구매 가능 개수 초과 (5개 초과): "[구매 가능 개수 초과]" 모달 표시, "구매 가능한 제품의 개수를 초과하여 담았습니다. 장바구니를 다시 확인하신 후 다시 시도해 주세요." 메시지 (Inter Regular 16pt), 확인 버튼만 표시 (영수증 페이지로 이동하지 않음)
     - 물건 없음: "[제품 개수 부족]" 모달 표시, "물건을 아예 안 담으셨군요! 쇼핑을 해서 장바구니에 물건을 담아주세요!" 메시지 (Inter Regular 16pt), 확인 버튼만 표시 (영수증 페이지로 이동하지 않음)
     - 정상 케이스: "[주문 가능]" 모달 표시, "물건을 모두 고르셨다면 아래의 주문 버튼을 눌러주세요." 메시지 (Inter Regular 16pt), 취소/주문 버튼 표시
-    - 주문 버튼 클릭 시: `POST /api/checkout` 호출로 장바구니 상품별 구매수(dream_store_stats.db) 누적 → 모달 내부 로딩 아이콘 표시 → 5초 후 receipt 페이지로 이동
+    - 주문 버튼 클릭 시: `POST /api/checkout` 호출로 장바구니 상품별 구매수(dream_artifact_stats.db) 누적 → 모달 내부 로딩 아이콘 표시 → 5초 후 receipt 페이지로 이동
     - 로딩 중 클릭 및 스크롤 차단 (body에 `loading-active` 클래스 추가하여 overflow: hidden, position: fixed 적용)
 - **JavaScript 파일**:
   - `static/js/cart.js`: Cart 페이지 전용 기능 (수량 변경, 삭제, 스크롤 위치 관리, 주문하기 기능)
@@ -493,7 +493,7 @@ python app.py
   - Price: 위치 (153, 1050), Inter Bold 40pt, 색상 #FFFFFF, 자간 -2%, 끝에 "원" 표시 (제품 12번 기준: 1100px, 동적 조정됨)
 - **리뷰 및 평가** (Description 높이에 따라 동적 조정됨):
   - Icon Star: 위치 (358, 1062), 크기 132×24px (제품 12번 기준, 동적 조정됨)
-  - Text Review: 위치 (503, 1063), Inter Bold 20pt, 색상 #FFFFFF, 행간 자동, 자간 -2%, 형식 "5.0 (N)" (N은 dream_store_stats.db의 product_stats.purchase_count) (제품 12번 기준, 동적 조정됨)
+  - Text Review: 위치 (503, 1063), Inter Bold 20pt, 색상 #FFFFFF, 행간 자동, 자간 -2%, 형식 "5.0 (N)" (N은 dream_artifact_stats.db의 product_stats.purchase_count) (제품 12번 기준, 동적 조정됨)
 - **구매 관련 요소** (Description 높이에 따라 동적 조정됨):
   - Cart Add Button: 위치 (365, 1127), 크기 144×60px, 호버 시 `cart-add-button-hover.png`로 이미지 변경, 클릭 시 장바구니에 상품 추가 (제품 12번 기준, 동적 조정됨)
     - **Hover 효과**: hover 시 핑크 계열의 더 밝은 색상으로 변경 (brightness 1.3, saturate 1.1)
@@ -578,9 +578,9 @@ python app.py
 ### Admin 페이지
 
 - **URL**: `/admin`
-- **고객 데이터**: dream_store.db 조회 및 관리, 페이지네이션 (20개씩), text1/text2/text3 15자 미리보기 (hover 시 tooltip)
-- **상품별 구매수**: dream_store_stats.db의 product_stats 테이블 조회 (id, name, type, purchase_count), 고객 테이블과 동일한 표 양식
-- **DB 초기화**: "DB 초기화" 버튼 → 고객 DB(dream_store.db) 초기화
+- **고객 데이터**: dream_artifact.db 조회 및 관리, 페이지네이션 (20개씩), text1/text2/text3 15자 미리보기 (hover 시 tooltip)
+- **상품별 구매수**: dream_artifact_stats.db의 product_stats 테이블 조회 (id, name, type, purchase_count), 고객 테이블과 동일한 표 양식
+- **DB 초기화**: "DB 초기화" 버튼 → 고객 DB(dream_artifact.db) 초기화
 - **상품 구매수 초기화**: "상품 구매수 초기화" 버튼 → 모든 상품의 purchase_count를 0으로 초기화
 
 ### 이미지 프리로딩 시스템
@@ -656,7 +656,7 @@ python app.py
   - `POST /api/add-to-cart`: 장바구니에 상품 추가 (JSON 요청/응답)
   - `POST /api/update-cart-quantity`: 장바구니 상품 수량 변경 (JSON 요청/응답)
   - `POST /api/delete-cart-item`: 장바구니에서 상품 삭제 (JSON 요청/응답)
-  - `POST /api/checkout`: 장바구니 결제 시 상품별 구매수(dream_store_stats.db) 누적 (Cart 주문 버튼 확인 후 호출)
+  - `POST /api/checkout`: 장바구니 결제 시 상품별 구매수(dream_artifact_stats.db) 누적 (Cart 주문 버튼 확인 후 호출)
   - `POST /intro8/submit`: 기억 입력 확인 및 토큰 계산 (메모리 스코어링 기반)
     - 요청 형식: `customer_id` (form 데이터)
     - 동작: text1, text2, text3을 가져와 각각 스코어링하여 토큰 계산 후 DB 저장
@@ -911,17 +911,17 @@ python app.py
 
 ## 데이터베이스
 
-### 고객 데이터 (dream_store.db)
-프로젝트 실행 시 `dream_store.db` 파일이 자동으로 생성됩니다. 이 파일은 `.gitignore`에 포함되어 Git에 업로드되지 않습니다.  
+### 고객 데이터 (dream_artifact.db)
+프로젝트 실행 시 `dream_artifact.db` 파일이 자동으로 생성됩니다. 이 파일은 `.gitignore`에 포함되어 Git에 업로드되지 않습니다.  
 Admin 페이지(`/admin`)에서 "DB 초기화" 버튼으로 고객 DB를 초기화할 수 있습니다.
 
-### 상품 구매수 통계 (dream_store_stats.db)
-프로젝트 실행 시 **먼저** `dream_store_stats.db`가 생성·동기화됩니다. `product_stats` 테이블에 products.json 기준으로 모든 상품이 행으로 들어가며, 새 행의 `purchase_count`는 0입니다. Cart에서 결제 시 `POST /api/checkout`으로 해당 주문 상품별 구매수가 누적됩니다.  
+### 상품 구매수 통계 (dream_artifact_stats.db)
+프로젝트 실행 시 **먼저** `dream_artifact_stats.db`가 생성·동기화됩니다. `product_stats` 테이블에 products.json 기준으로 모든 상품이 행으로 들어가며, 새 행의 `purchase_count`는 0입니다. Cart에서 결제 시 `POST /api/checkout`으로 해당 주문 상품별 구매수가 누적됩니다.  
 Admin 페이지에서 "상품 구매수 초기화" 버튼으로 모든 상품의 purchase_count를 0으로 되돌릴 수 있습니다.  
 Render 등 배포 시 영구 디스크를 쓸 경우 `DB_STATS_PATH` 환경 변수로 경로를 지정할 수 있습니다.
 
 ### 상품 데이터 (JSON)
-상품 정보는 `products.json` 파일에 저장됩니다 (Git 포함). `purchase_count`는 제거되었으며, 구매수는 dream_store_stats.db에서만 관리합니다.
+상품 정보는 `products.json` 파일에 저장됩니다 (Git 포함). `purchase_count`는 제거되었으며, 구매수는 dream_artifact_stats.db에서만 관리합니다.
 
 - 총 30개 상품
 - 각 상품은 고유한 ID (01~30)와 종류(type)를 가짐
